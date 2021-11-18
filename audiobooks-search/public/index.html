@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Audiobooks</title>
+	<link href="main.css" rel="stylesheet">
+</head>
+<body>
+
+
+<section class="section">
+	<div class="container">
+		<h1 class="title">Audiobooks</h1>
+		<p class="subtitle">
+			Search for your next listen!
+		</p>
+	</div>
+</section>
+
+<!-- Search bar -->
+<section class="search-bar">
+	<div class="field has-addons">
+		<div class="control" style="width: 100%">
+			<label>
+				<input class="input" type="text" placeholder="Search books">
+			</label>
+		</div>
+		<div class="control">
+			<a class="button is-primary">
+				Search
+			</a>
+		</div>
+	</div>
+</section>
+
+<!-- Results -->
+<section id="search-results">
+</section>
+
+<template id="book-template">
+	<div class="card">
+		<div class="card-content">
+			<div class="media">
+				<div class="media-left">
+					<figure class="image is-48x48">
+						<img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
+					</figure>
+				</div>
+				<div class="media-content">
+					<p class="title is-4">John Smith</p>
+					<p class="subtitle is-6">@johnsmith</p>
+				</div>
+			</div>
+
+			<div class="content">
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+				Phasellus nec iaculis mauris. <a>@bulmaio</a>.
+			</div>
+		</div>
+	</div>
+</template>
+
+
+<script type="application/javascript">
+
+	function clearBooks () {
+		const results = document.querySelector('#search-results')
+		results.innerHTML = ''
+	}
+
+	function addBook ({name, authors}) {
+		const template = document.querySelector('#book-template')
+		template.content.querySelector('.title').innerText = name
+		template.content.querySelector('.subtitle').innerText = authors
+		const clone = document.importNode(template.content, true)
+		const results = document.querySelector('#search-results')
+		results.appendChild(clone)
+	}
+
+	const selectElement = document.querySelector('.input')
+	selectElement.addEventListener('change', async (event) => {
+		clearBooks()
+		const query = event.target.value
+		const res = await fetch(`http://localhost:3001/search?q=${query}`, {
+			headers: {
+				'Accept': 'application/json'
+			}
+		})
+		const books = await res.json()
+		for (let book of books) {
+			addBook(book._source)
+		}
+	})
+</script>
+
+</body>
+</html>

@@ -127,6 +127,17 @@ services:
     networks:
       - workshop
 
+  audiobooks-search:
+    build: ./audiobooks-search
+    ports:
+      - "3001:3001"
+    environment:
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
+    networks:
+      - workshop
+
 volumes:
   zookeeper:
   kafka:
