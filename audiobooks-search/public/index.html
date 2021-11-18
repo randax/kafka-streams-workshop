@@ -23,7 +23,7 @@
 	<div class="field has-addons">
 		<div class="control" style="width: 100%">
 			<label>
-				<input class="input" type="text" placeholder="Search books">
+				<input id="search-bar" class="input" type="text" placeholder="Search books">
 			</label>
 		</div>
 		<div class="control">
@@ -64,30 +64,26 @@
 
 <script type="application/javascript">
 
+	const searchBar = document.querySelector('#search-bar')
+	const searchResults = document.querySelector('#search-results')
+	const cardTemplate = document.querySelector('#book-template')
+
 	function clearBooks () {
-		const results = document.querySelector('#search-results')
-		results.innerHTML = ''
+		searchResults.innerHTML = ''
 	}
 
 	function addBook ({name, authors}) {
-		const template = document.querySelector('#book-template')
-		template.content.querySelector('.title').innerText = name
-		template.content.querySelector('.subtitle').innerText = authors
-		const clone = document.importNode(template.content, true)
-		const results = document.querySelector('#search-results')
-		results.appendChild(clone)
+		const card = document.importNode(cardTemplate.content, true)
+		card.querySelector('.title').innerText = name
+		card.querySelector('.subtitle').innerText = authors
+		searchResults.appendChild(card)
 	}
 
-	const selectElement = document.querySelector('.input')
-	selectElement.addEventListener('change', async (event) => {
+	searchBar.addEventListener('change', async (event) => {
 		clearBooks()
 		const query = event.target.value
-		const res = await fetch(`http://localhost:3001/search?q=${query}`, {
-			headers: {
-				'Accept': 'application/json'
-			}
-		})
-		const books = await res.json()
+		const raw = await fetch(`/search?q=${query}`)
+		const books = await raw.json()
 		for (let book of books) {
 			addBook(book._source)
 		}
