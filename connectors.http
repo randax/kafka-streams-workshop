@@ -1,8 +1,8 @@
-POST localhost:8085/connectors
+POST http://192.168.64.2:8085/connectors
 Content-Type: application/json
 
 {
-  "name": "foo-v2",
+  "name": "foo",
   "config": {
 	"connector.class": "io.debezium.connector.postgresql.PostgresConnector",
 	"plugin.name": "pgoutput",
@@ -18,14 +18,14 @@ Content-Type: application/json
 
 ###
 
-GET localhost:8085/connectors
+GET http://192.168.64.2:8085/connectors
 
 ###
 
-GET localhost:8085/connectors/foo/status
+GET http://192.168.64.2:8085/connectors/foo/status
 
 ###
 
-DELETE localhost:8085/connectors/foo
+DELETE http://192.168.64.2:8085/connectors/foo
 
 ###

@@ -8,12 +8,11 @@
 </head>
 <body>
 
-
 <section class="section">
 	<div class="container">
-		<h1 class="title">Audiobooks</h1>
+		<h1 class="title">Audiobooks<span style="color: #00d1b2">4</span>You</h1>
 		<p class="subtitle">
-			Search for your next listen!
+			Find your next great listen!
 		</p>
 	</div>
 </section>
@@ -72,10 +71,11 @@
 		searchResults.innerHTML = ''
 	}
 
-	function addBook ({name, authors}) {
+	function addBook ({title, author, description}) {
 		const card = document.importNode(cardTemplate.content, true)
-		card.querySelector('.title').innerText = name
-		card.querySelector('.subtitle').innerText = authors
+		card.querySelector('.title').innerText = title
+		card.querySelector('.subtitle').innerText = author
+		card.querySelector('.content').innerText = description
 		searchResults.appendChild(card)
 	}
 
