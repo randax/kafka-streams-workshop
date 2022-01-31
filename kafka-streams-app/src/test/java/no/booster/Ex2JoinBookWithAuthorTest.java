@@ -34,24 +34,67 @@ public class Ex2JoinBookWithAuthorTest {
     private TestOutputTopic<String, BookProjection> bookProjections;
 
     @Test
+    public void testBookWithoutAuthor() {
+        books.pipeInput("0-7679-0817-1", aShortHistoryOfNearlyEverything());
+        assertThat(bookProjections.isEmpty()).isTrue();
+    }
+
+    @Test
     public void testBookHasAuthor() {
-        books.pipeInput("0-7679-0817-1", Book.newBuilder()
-                .setAuthorId(1L)
-                .setTitle("A Short History of Nearly Everything")
-                .setDescription("A popular science book that explains some areas of science, using easily accessible language that appeals more to the general public than many other books dedicated to the subject.")
-                .build()
-        );
-        authors.pipeInput("1", Author.newBuilder()
-                .setName("Bill Bryson")
-                .build()
-        );
-        assertThat(bookProjections.readValue()).isEqualTo(BookProjection.newBuilder()
+        books.pipeInput("0-7679-0817-1", aShortHistoryOfNearlyEverything());
+        authors.pipeInput("1", billBryson());
+        assertThat(bookProjections.readValue()).isEqualTo(book1());
+        assertThat(bookProjections.isEmpty()).isTrue();
+    }
+
+    @Test
+    public void testTwoBooksWithAuthor() {
+        books.pipeInput("0-7679-0817-1", aShortHistoryOfNearlyEverything());
+        books.pipeInput("0-7679-0251-3", aWalkInTheWoods());
+        authors.pipeInput("1", billBryson());
+        assertThat(bookProjections.readValuesToList()).containsExactlyInAnyOrder(book1(), book2());
+    }
+
+    private BookProjection book1() {
+        return BookProjection.newBuilder()
                 .setTitle("A Short History of Nearly Everything")
                 .setAuthor("Bill Bryson")
-                .setDescription("A popular science book that explains some areas of science, using easily accessible language that appeals more to the general public than many other books dedicated to the subject.")
-                .build()
-        );
-        assertThat(bookProjections.isEmpty()).isTrue();
+                .setDescription("A popular science book that explains some areas of science, using easily accessible " +
+                        "language that appeals more to the general public than many other books dedicated to the subject.")
+                .build();
+    }
+
+    private BookProjection book2() {
+        return BookProjection.newBuilder()
+                .setTitle("A Walk in the Woods: Rediscovering America on the Appalachian Trail")
+                .setAuthor("Bill Bryson")
+                .setDescription("A 1997 travel book by the writer Bill Bryson, chronicling his attempt to thru-hike " +
+                        "the Appalachian Trail during the spring and summer of 1996")
+                .build();
+    }
+
+    private Author billBryson() {
+        return Author.newBuilder()
+                .setName("Bill Bryson")
+                .build();
+    }
+
+    private Book aShortHistoryOfNearlyEverything() {
+        return Book.newBuilder()
+                .setAuthorId(1L)
+                .setTitle("A Short History of Nearly Everything")
+                .setDescription("A popular science book that explains some areas of science, using easily accessible " +
+                        "language that appeals more to the general public than many other books dedicated to the subject.")
+                .build();
+    }
+
+    private Book aWalkInTheWoods() {
+        return Book.newBuilder()
+                .setAuthorId(1L)
+                .setTitle("A Walk in the Woods: Rediscovering America on the Appalachian Trail")
+                .setDescription("A 1997 travel book by the writer Bill Bryson, chronicling his attempt to thru-hike " +
+                        "the Appalachian Trail during the spring and summer of 1996")
+                .build();
     }
 
     @BeforeEach
