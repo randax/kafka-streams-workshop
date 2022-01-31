@@ -1,0 +1,10 @@
+{
+  "type": "record",
+  "name": "BookProjection",
+  "namespace": "no.booster.avro",
+  "fields": [
+    {"name": "title", "type": "string"},
+    {"name": "author", "type": ["null", "string"], "default": null},
+    {"name": "description", "type": "string"}
+  ]
+}

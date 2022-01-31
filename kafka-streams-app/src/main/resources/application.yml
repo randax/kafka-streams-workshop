@@ -1,0 +1,22 @@
+spring:
+  kafka:
+    bootstrap-servers: docker:9092
+  cloud:
+    function.definition: joinAuthor
+    stream:
+      kafka:
+        streams:
+          binder:
+            deserializationExceptionHandler: logandfail
+            configuration:
+              schema.registry.url: ${SCHEMA_REGISTRY_URL:http://localhost:8081}
+              auto.register.schemas: true
+              default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+              default.value.serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
+              state.dir: ${STATE_DIR:/tmp/kafka-streams}
+            functions:
+              joinAuthor.applicationId: join-author-v1
+      bindings:
+        joinAuthor-in-0.destination: books
+        joinAuthor-in-1.destination: authors
+        joinAuthor-out-0.destination: book-projections

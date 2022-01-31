@@ -1,0 +1,10 @@
+{
+  "type": "record",
+  "name": "Book",
+  "namespace": "no.booster.avro",
+  "fields": [
+    {"name": "title", "type": "string"},
+    {"name": "authorId", "type": "long"},
+    {"name": "description", "type": "string"}
+  ]
+}

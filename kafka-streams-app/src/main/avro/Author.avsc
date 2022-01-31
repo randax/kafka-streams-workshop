@@ -1,0 +1,8 @@
+{
+  "type": "record",
+  "name": "Author",
+  "namespace": "no.booster.avro",
+  "fields": [
+    {"name": "name", "type": "string"}
+  ]
+}
