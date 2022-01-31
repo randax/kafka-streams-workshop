@@ -5,6 +5,6 @@
   "fields": [
     {"name": "title", "type": "string"},
     {"name": "author", "type": ["null", "string"], "default": null},
-    {"name": "description", "type": "string"}
+    {"name": "description", "type": ["null", "string"], "default": null}
   ]
 }

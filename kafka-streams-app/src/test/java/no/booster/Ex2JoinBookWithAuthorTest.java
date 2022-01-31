@@ -59,8 +59,6 @@ public class Ex2JoinBookWithAuthorTest {
         return BookProjection.newBuilder()
                 .setTitle("A Short History of Nearly Everything")
                 .setAuthor("Bill Bryson")
-                .setDescription("A popular science book that explains some areas of science, using easily accessible " +
-                        "language that appeals more to the general public than many other books dedicated to the subject.")
                 .build();
     }
 
@@ -68,8 +66,6 @@ public class Ex2JoinBookWithAuthorTest {
         return BookProjection.newBuilder()
                 .setTitle("A Walk in the Woods: Rediscovering America on the Appalachian Trail")
                 .setAuthor("Bill Bryson")
-                .setDescription("A 1997 travel book by the writer Bill Bryson, chronicling his attempt to thru-hike " +
-                        "the Appalachian Trail during the spring and summer of 1996")
                 .build();
     }
 
@@ -83,8 +79,6 @@ public class Ex2JoinBookWithAuthorTest {
         return Book.newBuilder()
                 .setAuthorId(1L)
                 .setTitle("A Short History of Nearly Everything")
-                .setDescription("A popular science book that explains some areas of science, using easily accessible " +
-                        "language that appeals more to the general public than many other books dedicated to the subject.")
                 .build();
     }
 
@@ -92,8 +86,6 @@ public class Ex2JoinBookWithAuthorTest {
         return Book.newBuilder()
                 .setAuthorId(1L)
                 .setTitle("A Walk in the Woods: Rediscovering America on the Appalachian Trail")
-                .setDescription("A 1997 travel book by the writer Bill Bryson, chronicling his attempt to thru-hike " +
-                        "the Appalachian Trail during the spring and summer of 1996")
                 .build();
     }
 
