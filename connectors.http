@@ -1,4 +1,4 @@
-POST http://192.168.64.2:8085/connectors
+POST http://docker:8085/connectors
 Content-Type: application/json
 
 {
@@ -19,14 +19,14 @@ Content-Type: application/json
 
 ###
 
-GET http://192.168.64.2:8085/connectors
+GET http://docker:8085/connectors
 
 ###
 
-GET http://192.168.64.2:8085/connectors/inventory/status
+GET http://docker:8085/connectors/inventory/status
 
 ###
 
-DELETE http://192.168.64.2:8085/connectors/inventory
+DELETE http://docker:8085/connectors/inventory
 
 ###

@@ -1,3 +1,5 @@
+CREATE SCHEMA inventory;
+
 CREATE TABLE inventory.author
 (
     id   bigint NOT NULL,
