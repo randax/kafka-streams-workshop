@@ -1,0 +1,12 @@
+{
+  "type": "record",
+  "name": "Key",
+  "namespace": "no.booster.inventory.author",
+  "fields": [
+	{
+	  "name": "id",
+	  "type": "long"
+	}
+  ],
+  "connect.name": "no.booster.inventory.author.Key"
+}

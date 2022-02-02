@@ -1,4 +1,4 @@
-package no.booster;
+package no.booster.ex2;
 
 import io.confluent.kafka.schemaregistry.testutil.MockSchemaRegistry;
 import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
@@ -6,6 +6,7 @@ import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde;
 import no.booster.avro.Author;
 import no.booster.avro.Book;
 import no.booster.avro.BookProjection;
+import no.booster.ex2.JoinBookWithAuthor;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.*;
@@ -23,7 +24,7 @@ import java.util.function.BiFunction;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class Ex2JoinBookWithAuthorTest {
+public class JoinBookWithAuthorTest {
 
     private static final String SCHEMA_REGISTRY_SCOPE = "test";
 
@@ -104,7 +105,7 @@ public class Ex2JoinBookWithAuthorTest {
         final Serde<Author> input1Serde = new SpecificAvroSerde<>();
         final Serde<BookProjection> outputSerde = new SpecificAvroSerde<>();
 
-        final Ex2JoinBookWithAuthor app = new Ex2JoinBookWithAuthor();
+        final JoinBookWithAuthor app = new JoinBookWithAuthor();
         final KTable<String, Book> input0 = builder.table(INPUT_TOPIC_0, Consumed.with(stringSerde, input0Serde));
         final KTable<String, Author> input1 = builder.table(INPUT_TOPIC_1, Consumed.with(stringSerde, input1Serde));
         final BiFunction<KTable<String, Book>, KTable<String, Author>, KStream<String, BookProjection>> process = app.joinAuthor();

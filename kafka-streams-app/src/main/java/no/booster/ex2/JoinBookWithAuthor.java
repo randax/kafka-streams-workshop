@@ -1,4 +1,4 @@
-package no.booster;
+package no.booster.ex2;
 
 import no.booster.avro.Author;
 import no.booster.avro.Book;
@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.function.BiFunction;
 
 @Configuration
-public class Ex2JoinBookWithAuthor {
+public class JoinBookWithAuthor {
 
     @Bean
     public BiFunction<KTable<String, Book>, KTable<String, Author>, KStream<String, BookProjection>> joinAuthor() {

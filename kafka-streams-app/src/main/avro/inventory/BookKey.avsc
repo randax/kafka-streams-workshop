@@ -1,0 +1,12 @@
+{
+  "type": "record",
+  "name": "Key",
+  "namespace": "no.booster.inventory.book",
+  "fields": [
+	{
+	  "name": "isbn",
+	  "type": "string"
+	}
+  ],
+  "connect.name": "no.booster.inventory.book.Key"
+}

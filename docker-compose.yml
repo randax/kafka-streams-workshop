@@ -19,6 +19,7 @@ services:
     depends_on:
       - zookeeper
     ports:
+      - "9092:9092"
       - "29092:29092"
     environment:
       KAFKA_BROKER_ID: 1
@@ -90,13 +91,13 @@ services:
     image: debezium/postgres:13
     restart: unless-stopped
     ports:
-      - "5433:5432"
+      - "5432:5432"
     environment:
       - POSTGRES_USER=foo
       - POSTGRES_PASSWORD=foo
       - POSTGRES_DB=foo
     volumes:
-      - ./db:/docker-entrypoint-initdb.d
+      - ./db/init.sql:/docker-entrypoint-initdb.d
     networks:
       - workshop
 
@@ -135,6 +136,17 @@ services:
       ELASTICSEARCH_HOSTS: http://elasticsearch:9200
     depends_on:
       - elasticsearch
+    networks:
+      - workshop
+
+  kafka-streams-app:
+    build: ./kafka-streams-app
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SCHEMA_REGISTRY_URL: http://schema-registry:8081
+    depends_on:
+      - kafka
+      - schema-registry
     networks:
       - workshop
 
