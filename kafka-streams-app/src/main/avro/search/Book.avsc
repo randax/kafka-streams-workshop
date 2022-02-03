@@ -3,6 +3,7 @@
   "name": "Book",
   "namespace": "no.booster.avro",
   "fields": [
+	{"name": "isbn", "type": "string"},
     {"name": "title", "type": "string"},
     {"name": "authorId", "type": "long"},
     {"name": "description", "type": ["null", "string"], "default": null}

@@ -1,0 +1,8 @@
+{
+  "type": "record",
+  "name": "UpVote",
+  "namespace": "no.booster.avro",
+  "fields": [
+    {"name": "userId", "type": "long"}
+  ]
+}
