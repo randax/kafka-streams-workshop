@@ -17,8 +17,6 @@ public class AggregateUpVotes {
 		return (books, upVotes) -> books
 				.leftJoin(upVotes.groupByKey().count(), this::withKarma)
 				.toStream();
-
-		// todo test no more than one vote per user
 	}
 
 	private BookProjection withKarma(BookProjection book, Long karma) {
