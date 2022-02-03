@@ -22,6 +22,7 @@ public class JoinBookWithAuthor {
 
     private BookProjection merge(Book book, Author author) {
         return BookProjection.newBuilder()
+				.setIsbn(book.getIsbn())
                 .setTitle(book.getTitle())
                 .setDescription(book.getDescription())
                 .setAuthor(author.getName())

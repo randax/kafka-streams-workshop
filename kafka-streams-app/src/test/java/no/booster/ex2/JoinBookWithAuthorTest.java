@@ -6,7 +6,6 @@ import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde;
 import no.booster.avro.Author;
 import no.booster.avro.Book;
 import no.booster.avro.BookProjection;
-import no.booster.ex2.JoinBookWithAuthor;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.*;
@@ -30,34 +29,35 @@ public class JoinBookWithAuthorTest {
 
     private TopologyTestDriver testDriver;
 
-    private TestInputTopic<String, Book> books;
+    private TestInputTopic<String, Book> booksIn;
     private TestInputTopic<String, Author> authors;
-    private TestOutputTopic<String, BookProjection> bookProjections;
+    private TestOutputTopic<String, BookProjection> booksOut;
 
     @Test
     public void testBookWithoutAuthor() {
-        books.pipeInput("0-7679-0817-1", aShortHistoryOfNearlyEverything());
-        assertThat(bookProjections.isEmpty()).isTrue();
+        booksIn.pipeInput("0-7679-0817-1", aShortHistoryOfNearlyEverything());
+        assertThat(booksOut.isEmpty()).isTrue();
     }
 
     @Test
     public void testBookHasAuthor() {
-        books.pipeInput("0-7679-0817-1", aShortHistoryOfNearlyEverything());
+        booksIn.pipeInput("0-7679-0817-1", aShortHistoryOfNearlyEverything());
         authors.pipeInput("1", billBryson());
-        assertThat(bookProjections.readValue()).isEqualTo(book1());
-        assertThat(bookProjections.isEmpty()).isTrue();
+        assertThat(booksOut.readValue()).isEqualTo(book1());
+        assertThat(booksOut.isEmpty()).isTrue();
     }
 
     @Test
     public void testTwoBooksWithAuthor() {
-        books.pipeInput("0-7679-0817-1", aShortHistoryOfNearlyEverything());
-        books.pipeInput("0-7679-0251-3", aWalkInTheWoods());
+        booksIn.pipeInput("0-7679-0817-1", aShortHistoryOfNearlyEverything());
+        booksIn.pipeInput("0-7679-0251-3", aWalkInTheWoods());
         authors.pipeInput("1", billBryson());
-        assertThat(bookProjections.readValuesToList()).containsExactlyInAnyOrder(book1(), book2());
+        assertThat(booksOut.readValuesToList()).containsExactlyInAnyOrder(book1(), book2());
     }
 
     private BookProjection book1() {
         return BookProjection.newBuilder()
+				.setIsbn("0-7679-0817-1")
                 .setTitle("A Short History of Nearly Everything")
                 .setAuthor("Bill Bryson")
                 .build();
@@ -65,6 +65,7 @@ public class JoinBookWithAuthorTest {
 
     private BookProjection book2() {
         return BookProjection.newBuilder()
+				.setIsbn("0-7679-0251-3")
                 .setTitle("A Walk in the Woods: Rediscovering America on the Appalachian Trail")
                 .setAuthor("Bill Bryson")
                 .build();
@@ -78,6 +79,7 @@ public class JoinBookWithAuthorTest {
 
     private Book aShortHistoryOfNearlyEverything() {
         return Book.newBuilder()
+				.setIsbn("0-7679-0817-1")
                 .setAuthorId(1L)
                 .setTitle("A Short History of Nearly Everything")
                 .build();
@@ -85,6 +87,7 @@ public class JoinBookWithAuthorTest {
 
     private Book aWalkInTheWoods() {
         return Book.newBuilder()
+				.setIsbn("0-7679-0251-3")
                 .setAuthorId(1L)
                 .setTitle("A Walk in the Woods: Rediscovering America on the Appalachian Trail")
                 .build();
@@ -98,9 +101,8 @@ public class JoinBookWithAuthorTest {
         final String INPUT_TOPIC_0 = "input-0";
         final String INPUT_TOPIC_1 = "input-1";
         final String OUTPUT_TOPIC = "output";
-        final String MOCK_SCHEMA_REGISTRY_URL = "mock://" + SCHEMA_REGISTRY_SCOPE;
 
-        final Serde<String> stringSerde = Serdes.String();
+		final Serde<String> stringSerde = Serdes.String();
         final Serde<Book> input0Serde = new SpecificAvroSerde<>();
         final Serde<Author> input1Serde = new SpecificAvroSerde<>();
         final Serde<BookProjection> outputSerde = new SpecificAvroSerde<>();
@@ -112,24 +114,17 @@ public class JoinBookWithAuthorTest {
         final KStream<String, BookProjection> output = process.apply(input0, input1);
         output.to(OUTPUT_TOPIC, Produced.with(stringSerde, outputSerde));
 
-        final Properties props = new Properties();
-        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "TopologyTestDriver");
-        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "dummy:1234");
-        props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.StringSerde.class);
-        props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, SpecificAvroSerde.class);
-        props.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, MOCK_SCHEMA_REGISTRY_URL);
-        testDriver = new TopologyTestDriver(builder.build(), props);
+		testDriver = new TopologyTestDriver(builder.build(), new Properties());
 
-        // Configure Serdes to use the same mock schema registry URL
-        Map<String, String> config = Map.of(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, MOCK_SCHEMA_REGISTRY_URL);
+        Map<String, String> config = Map.of(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, "mock://" + SCHEMA_REGISTRY_SCOPE);
         input0Serde.configure(config, false);
         input1Serde.configure(config, false);
         outputSerde.configure(config, false);
 
         // Define input and output topics to use in tests
-        books = testDriver.createInputTopic(INPUT_TOPIC_0, stringSerde.serializer(), input0Serde.serializer());
+        booksIn = testDriver.createInputTopic(INPUT_TOPIC_0, stringSerde.serializer(), input0Serde.serializer());
         authors = testDriver.createInputTopic(INPUT_TOPIC_1, stringSerde.serializer(), input1Serde.serializer());
-        bookProjections = testDriver.createOutputTopic(OUTPUT_TOPIC, stringSerde.deserializer(), outputSerde.deserializer());
+        booksOut = testDriver.createOutputTopic(OUTPUT_TOPIC, stringSerde.deserializer(), outputSerde.deserializer());
     }
 
     @AfterEach
