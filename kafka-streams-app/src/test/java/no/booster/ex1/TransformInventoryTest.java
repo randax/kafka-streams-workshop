@@ -59,14 +59,20 @@ public class TransformInventoryTest {
 	}
 
 	@Test
-	public void testUpdate() {
-		// todo
-	}
-
-	@Test
-	@Disabled("Bonus exercise")
 	public void testDelete() {
-		// todo
+		String isbn = "0-7679-0817-1";
+		inventory.pipeInput(new Key(isbn), null);
+		inventory.pipeInput(new Key(isbn), bookDeleted());
+
+		KeyValue<String, Book> b1 = books.readKeyValue();
+		assertThat(b1.key).isEqualTo(isbn);
+		assertThat(b1.value).isNull();
+
+		KeyValue<String, Book> b2 = books.readKeyValue();
+		assertThat(b2.key).isEqualTo(isbn);
+		assertThat(b2.value).isNull();
+
+		assertTrue(books.isEmpty());
 	}
 
 	private Envelope bookCreated(String isbn, String title, long authorId, String description) {
@@ -90,13 +96,41 @@ public class TransformInventoryTest {
 				.setTsMs(1643843496004L)
 				.setTransaction(null)
 				.setBefore(null)
-				.setAfter(no.booster.inventory.book.Value.newBuilder()
-						.setIsbn(isbn)
-						.setTitle(title)
-						.setAuthorId(authorId)
-						.setDescription(description)
+				.setAfter(bookValue(isbn, title, authorId, description))
+				.build();
+	}
+
+	private Envelope bookDeleted() {
+		return Envelope.newBuilder()
+				.setSource(io.debezium.connector.postgresql.Source.newBuilder()
+						.setVersion("1.7.0.Final")
+						.setConnector("postgresql")
+						.setName("no.booster")
+						.setTsMs(1643843496003L)
+						.setSnapshot("true")
+						.setDb("audiobooks")
+						.setSequence("[null,\"23930744\"]")
+						.setSchema$("inventory")
+						.setTable("book")
+						.setTxId(496L)
+						.setLsn(23930744L)
+						.setXmin(null)
 						.build()
 				)
+				.setOp("d")
+				.setTsMs(1643843496004L)
+				.setTransaction(null)
+				.setAfter(null)
+				.setBefore(bookValue("0-7679-0817-1", "A Short History of Nearly Everything", 1L, ""))
+				.build();
+	}
+
+	private no.booster.inventory.book.Value bookValue(String isbn, String title, long authorId, String description) {
+		return no.booster.inventory.book.Value.newBuilder()
+				.setIsbn(isbn)
+				.setTitle(title)
+				.setAuthorId(authorId)
+				.setDescription(description)
 				.build();
 	}
 

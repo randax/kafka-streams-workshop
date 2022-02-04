@@ -15,21 +15,28 @@ public class TransformInventory {
 	// todo what is "correct" of ktable and kstream here?
 	@Bean
 	public Function<KStream<no.booster.inventory.book.Key, no.booster.inventory.book.Envelope>, KStream<String, Book>> transformBook() {
-		// todo test delete
-		return books -> books.map((k, v) -> new KeyValue<>(k.getIsbn().toString(), Book.newBuilder()
+		return books -> books.map((k, v) -> new KeyValue<>(k.getIsbn().toString(), transformBook(k, v)));
+	}
+
+	private Book transformBook(no.booster.inventory.book.Key k, no.booster.inventory.book.Envelope v) {
+		if (v == null || v.getAfter() == null) return null;
+		return Book.newBuilder()
 				.setIsbn(k.getIsbn())
 				.setTitle(v.getAfter().getTitle())
 				.setDescription(v.getAfter().getDescription())
 				.setAuthorId(v.getAfter().getAuthorId())
-				.build())
-		);
+				.build();
 	}
 
 	@Bean
 	public Function<KStream<no.booster.inventory.author.Key, no.booster.inventory.author.Envelope>, KStream<String, Author>> transformAuthor() {
-		// todo test delete
-		return authors -> authors.map((k, v) -> new KeyValue<>(String.valueOf(k.getId()), Author.newBuilder()
+		return authors -> authors.map((k, v) -> new KeyValue<>(String.valueOf(k.getId()), transformAuthor(v)));
+	}
+
+	private Author transformAuthor(no.booster.inventory.author.Envelope v) {
+		if (v == null || v.getAfter() == null) return null;
+		return Author.newBuilder()
 				.setName(v.getAfter().getName())
-				.build()));
+				.build();
 	}
 }
