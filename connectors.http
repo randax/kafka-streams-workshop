@@ -10,7 +10,7 @@ Content-Type: application/json
 	"database.port": "5432",
 	"database.user": "foo",
 	"database.password": "foo",
-	"database.dbname" : "foo",
+	"database.dbname": "foo",
 	"database.server.name": "no.booster",
 	"schema.include.list": "inventory",
 	"table.exclude.list": ""
@@ -29,4 +29,32 @@ GET http://docker:8085/connectors/inventory/status
 
 DELETE http://docker:8085/connectors/inventory
 
+
+
+
+
+### Elasticsearch Sink Connector
+POST http://docker:8085/connectors
+Content-Type: application/json
+
+{
+  "name": "elasticsearch-sink",
+  "config": {
+	"connector.class": "io.confluent.connect.elasticsearch.ElasticsearchSinkConnector",
+	"connection.url": "http://elasticsearch:9200",
+	"tasks.max": "1",
+	"topics.regex": "books-*",
+	"type.name": "_doc",
+	"behavior.on.null.values": "DELETE",
+	"schema.ignore": "true",
+	"key.converter": "org.apache.kafka.connect.storage.StringConverter"
+  }
+}
+
 ###
+
+GET http://docker:8085/connectors/elasticsearch-sink/status
+
+###
+
+DELETE http://docker:8085/connectors/elasticsearch-sink

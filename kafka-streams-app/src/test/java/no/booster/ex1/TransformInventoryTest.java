@@ -14,7 +14,6 @@ import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.Produced;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
@@ -77,21 +76,7 @@ public class TransformInventoryTest {
 
 	private Envelope bookCreated(String isbn, String title, long authorId, String description) {
 		return Envelope.newBuilder()
-				.setSource(io.debezium.connector.postgresql.Source.newBuilder()
-						.setVersion("1.7.0.Final")
-						.setConnector("postgresql")
-						.setName("no.booster")
-						.setTsMs(1643843496003L)
-						.setSnapshot("true")
-						.setDb("audiobooks")
-						.setSequence("[null,\"23930744\"]")
-						.setSchema$("inventory")
-						.setTable("book")
-						.setTxId(496L)
-						.setLsn(23930744L)
-						.setXmin(null)
-						.build()
-				)
+				.setSource(source())
 				.setOp("r")
 				.setTsMs(1643843496004L)
 				.setTransaction(null)
@@ -102,26 +87,29 @@ public class TransformInventoryTest {
 
 	private Envelope bookDeleted() {
 		return Envelope.newBuilder()
-				.setSource(io.debezium.connector.postgresql.Source.newBuilder()
-						.setVersion("1.7.0.Final")
-						.setConnector("postgresql")
-						.setName("no.booster")
-						.setTsMs(1643843496003L)
-						.setSnapshot("true")
-						.setDb("audiobooks")
-						.setSequence("[null,\"23930744\"]")
-						.setSchema$("inventory")
-						.setTable("book")
-						.setTxId(496L)
-						.setLsn(23930744L)
-						.setXmin(null)
-						.build()
-				)
+				.setSource(source())
 				.setOp("d")
 				.setTsMs(1643843496004L)
 				.setTransaction(null)
 				.setAfter(null)
 				.setBefore(bookValue("0-7679-0817-1", "A Short History of Nearly Everything", 1L, ""))
+				.build();
+	}
+
+	private io.debezium.connector.postgresql.Source source() {
+		return io.debezium.connector.postgresql.Source.newBuilder()
+				.setVersion("1.7.0.Final")
+				.setConnector("postgresql")
+				.setName("no.booster")
+				.setTsMs(1643843496003L)
+				.setSnapshot("true")
+				.setDb("audiobooks")
+				.setSequence("[null,\"23930744\"]")
+				.setSchema$("inventory")
+				.setTable("book")
+				.setTxId(496L)
+				.setLsn(23930744L)
+				.setXmin(null)
 				.build();
 	}
 
