@@ -122,3 +122,48 @@ Let us help Cecilie with populating the Elasticsearch index. Register an Elastic
 
 Try the search app again, and feel the joy. It is time to ask Cecilie to buy you a coffee!
 
+## Exercise 2
+
+In the first exercise we did set up a lot of stuff, but we didn't really provide a lot of value other than synchronize
+data from a Postgresql database to Elasticsearch. It is time to change that!
+
+Cecilie was really happy that the search engine now provides results, but she did note one thing: none of the books
+contain any author. And searching by author does not work, as it should. That will be the task of this second exercise.
+
+### Kafka Streams: Join Books with Author
+
+It is time to write more code. This time, it involves a _stateful_
+application. Fill in the missing parts in ``no.booster.ex2.JoinBookWithAuthor``.
+
+When the following test runs without exceptions, you can move on
+
+    ./mvnw clean package -Dtest=JoinBookWithAuthorTest
+
+Before you start up the improved version of your kafka streams app, let's change a few settings
+in ``docker-compose.yaml``. Update the following environment variables:
+
+```
+  audiobooks-search:
+    environment:
+      BOOKS_INDEX: books-v2
+      ...
+
+  kafka-streams-app:
+    environment:
+      SPRING_KAFKA_FUNCTION_DEFINITION: transformBook;transformAuthor;joinAuthor
+      ...
+```
+
+These changes tell ``audiobooks-search`` to use a new index, and our ``kafka-streams-app`` to enable the `joinAuthor`
+function.
+
+Now, lets restart ``audiobooks-search``:
+
+    docker-compose up -d audiobooks-search
+
+And build and run your updated version of the ``kafka-streams-app``:
+
+    docker-compose up -d --build kafka-streams-app
+
+Open the app [audiobooks-search](http://dockerhost:3001) again and see that the author is both listed and searchable!
+

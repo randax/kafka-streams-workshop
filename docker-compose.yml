@@ -144,7 +144,7 @@ services:
     build: ./kafka-streams-app
     environment:
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
-      SPRING_KAFKA_FUNCTION_DEFINITION: transformBook
+      SPRING_KAFKA_FUNCTION_DEFINITION: transformBook;transformAuthor
       SCHEMA_REGISTRY_URL: http://schema-registry:8081
     depends_on:
       - kafka
