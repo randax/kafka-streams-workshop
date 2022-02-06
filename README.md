@@ -1,8 +1,8 @@
 ## Exercise 1
 
 In this exercise, we will learn how to use _Kafka Connect_ with the _Debezium_ plugin to pull data from our Postgres
-database into Kafka topics. Once data is available in Kafka topics, we will implement a simple transformation with _
-Kafka Streams_, and use another Kafka Connect plugin to load the data into _Elasticsearch_.
+database into Kafka topics. Once data is available in Kafka topics, we will implement a simple transformation with
+_Kafka Streams_, and use another Kafka Connect plugin to load the data into _Elasticsearch_.
 
 ### Inspect database tables
 
@@ -72,4 +72,41 @@ let's try to change the title of one of the books in the database:
 
     update book set title='A Short History of Nearly Everything!' where isbn='0-7679-0817-1';
 
+### Transform data
+
+It is time to write our first _Kafka Stream_ application. This time it even involves writing a bit of Java code.
+
+Open the folder ``kafka-streams-app`` in your favourite IDE, and add the missing parts
+in ``no.booster.ex1.TransformInventory``.
+
+Open a new terminal, and ``cd`` into the directory of the kafka streams app. Then create the jar file by running the
+following command:
+
+    ./mvnw clean package -Dtest=TransformInventoryTest
+
+From the terminal that you run ``docker-compose``, build and run your first version of the ``kafka-streams-app``:
+
+    docker-compose up -d --build kafka-streams-app
+
+In Kafdrop, you should now see the topic ``books-v1``, and it should contain the records that were produced by your
+function ``transformBook``.
+
+### Export data to Elasticsearch
+
+It may be time to ask yourself the question, why am I doing all of this? If you didn't know, your colleague Elise has
+already built the first version of the new audiobooks search frontend app. Start it up:
+
+    docker-compose up -d audiobooks-search
+
+Elise have chosen _Elasticsearch_ as her backend because she believes that it can deliver what she needs from a search
+backend, and has even prepared some index mappings to use. Open the search app that she has created by navigating
+to http://docker:3001/ (again replace docker with whatever host you use).
+
+Notice something? No books, right?
+
+Let us help Elise with populating the Elasticsearch index. Register an Elasticsearch Sink connector:
+
+    curl -X POST -H 'Content-Type: application/json' -d @./connectors/elasticsearch-sink-books.json http://docker:8085/connectors
+
+Try the search app again, and you should find books. It is time to ask Elise to buy you a coffee!
 

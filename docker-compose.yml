@@ -134,7 +134,7 @@ services:
       - "3001:3001"
     environment:
       ELASTICSEARCH_HOSTS: http://elasticsearch:9200
-      BOOKS_INDEX: books
+      BOOKS_INDEX: books-v1
     depends_on:
       - elasticsearch
     networks:
@@ -144,6 +144,7 @@ services:
     build: ./kafka-streams-app
     environment:
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_KAFKA_FUNCTION_DEFINITION: transformBook
       SCHEMA_REGISTRY_URL: http://schema-registry:8081
     depends_on:
       - kafka
