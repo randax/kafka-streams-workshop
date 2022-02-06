@@ -167,3 +167,66 @@ And build and run your updated version of the ``kafka-streams-app``:
 
 Open the app [audiobooks-search](http://dockerhost:3001) again and see that the author is both listed and searchable!
 
+## Exercise 3
+
+The search app is now almost perfect, but there is one important thing missing that Cecilie has put a lot of work into
+when designing the index mapping; user recommendations!
+
+So far, the only source of data has been the inventory database tables. In this exercise you will start to enrich books
+with data from other sources.
+
+The Audiobooks4You app allows users to like a book. This functionality is provided by a different microservice, that
+records the action of liking a book as an _UpVote_ event stored on the ``up-votes`` topic.
+
+### Kafka Streams: Aggregate up-votes
+
+Your task will be to count likes, and add it to the book projection. Fill in the missing parts
+in ``no.booster.ex3.AggregateUpVotes``. When the following test runs without exceptions, you can move on to the next
+step.
+
+    ./mvnw clean package -Dtest=AggregateUpVotesTest
+
+For the purpose of this exercise, we will simulate user likes by importing some sample data. Run these commands:
+
+```
+# Copy sample data
+docker-compose cp up-votes.txt schema-registry:/up-votes.txt
+
+# exec into schema-registry container
+docker-compose exec schema-registry bash
+
+# Import sample data
+kafka-avro-console-producer \
+--bootstrap-server kafka:9092 \
+--topic up-votes \
+--property value.schema='{"type":"record","name":"UpVote","namespace":"no.booster.avro","fields":[{"name":"userId","type":"long"}]}' \
+--property parse.key=true \
+--property key.serializer=org.apache.kafka.common.serialization.StringSerializer \
+--property "key.separator=:" < /up-votes.txt
+```
+
+Again, let's change a few more settings in ``docker-compose.yaml``. This time, update the following environment
+variables:
+
+```
+  audiobooks-search:
+    environment:
+      BOOKS_INDEX: books-v3
+      ...
+
+  kafka-streams-app:
+    environment:
+      SPRING_KAFKA_FUNCTION_DEFINITION: transformBook;transformAuthor;joinAuthor;upVotes
+      ...
+```
+
+Again, same procedure. Restart ``audiobooks-search``:
+
+    docker-compose up -d audiobooks-search
+
+And build and run your updated version of the ``kafka-streams-app``:
+
+    docker-compose up -d --build kafka-streams-app
+
+Open the app [audiobooks-search](http://dockerhost:3001) again to see that the likes are visible, and that they are used
+to improve sorting!

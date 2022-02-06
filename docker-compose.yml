@@ -44,6 +44,8 @@ services:
       - "8081:8081"
     depends_on:
       - kafka
+    #    volumes:
+    #      - ${PWD}/audiobooks-upvotes/:/home/foo
     networks:
       - workshop
 
