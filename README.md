@@ -1,3 +1,16 @@
+## Before we start
+
+### Add ``dockerhost`` to `/etc/hosts`
+
+This tutorial will refer to ``dockerhost`` as the hostname of your docker VM. It might be a good idea to alias it in
+your ``/etc/hosts``
+file. If you are on linux, or use Docker for Mac and are used to localhost, then simply add:
+
+```
+➜  tail -n1 /etc/hosts
+127.0.0.1 dockerhost
+```
+
 ## Exercise 1
 
 In this exercise, we will learn how to use _Kafka Connect_ with the _Debezium_ plugin to pull data from our Postgres
@@ -24,25 +37,24 @@ Books and authors are available under the schema ``inventory``:
 
 Now on to the fun part. We will set up an application that pulls data from our database and make it available in Kafka
 topics, and what better way than to use the Postgres transaction log as the source!
-If this task seems daunting, you will be happy to know that [_
-Debezium_](https://debezium.io/documentation/reference/stable/connectors/postgresql.html)
+If this task seems daunting, you will be happy to know that [
+Debezium](https://debezium.io/documentation/reference/stable/connectors/postgresql.html)
 provides all of that for us. FYI, this process is sometimes referred to as _Change Data Capture_.
 
-But first, let's start up _Kafka Connect_ (with the Debezium plugin installed), and _Kafdrop_, a GUI to allow us to
+But first, let's start up _Kafka Connect_ (with the Debezium plugin installed), and _Kafdrop_ - a GUI to allow us to
 easily see the content of our topics.
 
     docker-compose up -d kafka-connect kafdrop
 
-Navigate to ``http://docker:9000/`` (replace `docker` with the hostname of your docker virtual machine)
-to see what topics are created.
+Open [Kafdrop](http://dockerhost:9000/) to see what topics are created.
 
 Now, register the debezium connector:
 
-    curl -X POST -H 'Content-Type: application/json' -d @./connectors/debezium-source-inventory.json http://docker:8085/connectors
+    curl -X POST -H 'Content-Type: application/json' -d @./connectors/debezium-source-inventory.json http://dockerhost:8085/connectors
 
 Check the status of the connector:
 
-    curl http://docker:8085/connectors/debezium-source-inventory/status
+    curl http://dockerhost:8085/connectors/debezium-source-inventory/status
 
 Both connector state, and task state should be `RUNNING`:
 
@@ -64,7 +76,7 @@ Both connector state, and task state should be `RUNNING`:
 }
 ```
 
-Refresh Kafdrop, anc validate that two new topics (_no.booster.inventory.book_ and _no.booster.inventory.author_)
+Refresh Kafdrop, and validate that two new topics (_no.booster.inventory.book_ and _no.booster.inventory.author_)
 have been created, and that the data from the database tables are imported.
 
 Congratulations, you now have everything set up to sync data from the database to Kafka! And just to see that it works,
@@ -93,20 +105,20 @@ function ``transformBook``.
 
 ### Export data to Elasticsearch
 
-It may be time to ask yourself the question, why am I doing all of this? If you didn't know, your colleague Elise has
+It may be time to ask yourself the question, why am I doing all of this? If you didn't know, your colleague Cecilie has
 already built the first version of the new audiobooks search frontend app. Start it up:
 
     docker-compose up -d audiobooks-search
 
-Elise have chosen _Elasticsearch_ as her backend because she believes that it can deliver what she needs from a search
-backend, and has even prepared some index mappings to use. Open the search app that she has created by navigating
-to http://docker:3001/ (again replace docker with whatever host you use).
+Cecilie have chosen _Elasticsearch_ because she believes that it can deliver what she needs from the search backend, and
+she has even prepared some index mappings to use. Open the app [audiobooks-search](http://dockerhost:3001) that she has
+created.
 
 Notice something? No books, right?
 
-Let us help Elise with populating the Elasticsearch index. Register an Elasticsearch Sink connector:
+Let us help Cecilie with populating the Elasticsearch index. Register an Elasticsearch Sink connector:
 
-    curl -X POST -H 'Content-Type: application/json' -d @./connectors/elasticsearch-sink-books.json http://docker:8085/connectors
+    curl -X POST -H 'Content-Type: application/json' -d @./connectors/elasticsearch-sink-books.json http://dockerhost:8085/connectors
 
-Try the search app again, and you should find books. It is time to ask Elise to buy you a coffee!
+Try the search app again, and feel the joy. It is time to ask Cecilie to buy you a coffee!
 
