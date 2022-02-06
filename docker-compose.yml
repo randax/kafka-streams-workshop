@@ -134,6 +134,7 @@ services:
       - "3001:3001"
     environment:
       ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+      BOOKS_INDEX: books
     depends_on:
       - elasticsearch
     networks:

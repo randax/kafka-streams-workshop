@@ -8,6 +8,8 @@ const client = new elasticsearch.Client({
 	hosts: [elasticsearchUrl],
 })
 
+const index = process.env.BOOKS_INDEX || 'books-v1'
+
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
@@ -26,7 +28,7 @@ app.use(function (req, res, next) {
 app.get('/search', function (req, res) {
 	client
 		.search({
-			index: 'books',
+			index: index,
 			body: {
 				size: 10,
 				from: 0,
@@ -55,11 +57,11 @@ async function setup () {
 
 	console.log('Elasticsearch cluster is ready!')
 
-	const indexExists = await client.indices.exists({index: 'books'})
+	const indexExists = await client.indices.exists({index: index})
 
 	if (!indexExists) {
 		await client.indices.create({
-			index: 'books',
+			index: index,
 			body: {
 				mappings: {
 					properties: {

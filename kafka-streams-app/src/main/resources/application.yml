@@ -2,7 +2,7 @@ spring:
   kafka:
     bootstrap-servers: kafka:9092
   cloud:
-    function.definition: transformBook;transformAuthor;joinAuthor
+    function.definition: transformBook;transformAuthor;joinAuthor;upVotes
     stream:
       kafka:
         streams:
@@ -15,9 +15,10 @@ spring:
               default.value.serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
               state.dir: ${STATE_DIR:/tmp/kafka-streams}
             functions:
-              transformBook.applicationId: transform-book-v1
-              transformAuthor.applicationId: transform-author-v1
-              joinAuthor.applicationId: join-author-v1
+              transformBook.applicationId: transform-book
+              transformAuthor.applicationId: transform-author
+              joinAuthor.applicationId: join-author
+              upVotes.applicationId: up-votes
           bindings:
             transformBook-in-0.consumer.keySerde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
             transformAuthor-in-0.consumer.keySerde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
@@ -26,13 +27,18 @@ spring:
 
         # Transform from debezium format to our book model
         transformBook-in-0.destination: no.booster.inventory.book
-        transformBook-out-0.destination: books
+        transformBook-out-0.destination: books-v1
 
         # Transform from debezium format to our author model
         transformAuthor-in-0.destination: no.booster.inventory.author
         transformAuthor-out-0.destination: authors
 
         # Join books with its author
-        joinAuthor-in-0.destination: books
+        joinAuthor-in-0.destination: books-v1
         joinAuthor-in-1.destination: authors
-        joinAuthor-out-0.destination: book-projections
+        joinAuthor-out-0.destination: books-v2
+
+        # Add up votes to books
+        upVotes-in-0.destination: books-v2
+        upVotes-in-1.destination: up-votes
+        upVotes-out-0.destination: books-v3

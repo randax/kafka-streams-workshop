@@ -1,0 +1,13 @@
+{
+  "name": "elasticsearch-sink",
+  "config": {
+    "connector.class": "io.confluent.connect.elasticsearch.ElasticsearchSinkConnector",
+    "connection.url": "http://elasticsearch:9200",
+    "tasks.max": "1",
+    "topics.regex": "books-*",
+    "type.name": "_doc",
+    "behavior.on.null.values": "DELETE",
+    "schema.ignore": "true",
+    "key.converter": "org.apache.kafka.connect.storage.StringConverter"
+  }
+}
