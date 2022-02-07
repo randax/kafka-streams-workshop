@@ -37,7 +37,8 @@ app.get('/search', function (req, res) {
 						"query": {
 							"multi_match": {
 								"query": req.query['q'],
-								"fields": ["title", "author", "description"]
+								"fields": ["title", "author", "description"],
+								"fuzziness": "AUTO"
 							}
 						},
 						"boost_mode": "multiply",
