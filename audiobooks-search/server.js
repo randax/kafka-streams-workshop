@@ -8,7 +8,7 @@ const client = new elasticsearch.Client({
 	hosts: [elasticsearchUrl],
 })
 
-const index = process.env.BOOKS_INDEX || 'books-v1'
+const index = process.env.BOOKS_INDEX || 'books-v3'
 
 const express = require('express')
 const app = express()

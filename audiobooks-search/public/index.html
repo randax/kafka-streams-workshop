@@ -1,36 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Audiobooks</title>
-	<link href="main.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>Audiobooks</title>
+    <link href="https://bulma.io/vendor/fontawesome-free-5.15.2-web/css/all.min.css" rel="stylesheet">
+    <link href="main.css" rel="stylesheet">
 </head>
 <body>
 
 <section class="section">
-	<div class="container">
-		<h1 class="title">Audiobooks<span style="color: #00d1b2">4</span>You</h1>
-		<p class="subtitle">
-			Find your next great listen!
-		</p>
-	</div>
+    <div class="container">
+        <h1 class="title">Audiobooks<span style="color: #00d1b2">4</span>You</h1>
+        <p class="subtitle">
+            Find your next great listen!
+        </p>
+    </div>
 </section>
 
 <!-- Search bar -->
 <section class="search-bar">
-	<div class="field has-addons">
-		<div class="control" style="width: 100%">
-			<label>
-				<input id="search-bar" class="input" type="text" placeholder="Search books">
-			</label>
-		</div>
-		<div class="control">
-			<a class="button is-primary">
-				Search
-			</a>
-		</div>
-	</div>
+    <div class="field has-addons">
+        <div class="control" style="width: 100%">
+            <label>
+                <input class="input" id="search-bar" placeholder="Search books" type="text">
+            </label>
+        </div>
+        <div class="control">
+            <a class="button is-primary">
+                Search
+            </a>
+        </div>
+    </div>
 </section>
 
 <!-- Results -->
@@ -38,56 +39,70 @@
 </section>
 
 <template id="book-template">
-	<div class="card">
-		<div class="card-content">
-			<div class="media">
-				<div class="media-left">
-					<figure class="image is-48x48">
-						<img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
-					</figure>
-				</div>
-				<div class="media-content">
-					<p class="title is-4">John Smith</p>
-					<p class="subtitle is-6">@johnsmith</p>
-				</div>
-			</div>
+    <div class="card">
+        <div class="card-content">
+            <div class="media">
+                <div class="media-left">
+                    <figure class="image is-48x48">
+                        <img alt="Placeholder image"
+                             src="https://upload.wikimedia.org/wikipedia/commons/5/50/Closed_Book_Icon.svg">
+                    </figure>
+                </div>
+                <div class="media-content">
+                    <p class="title is-4">John Smith</p>
+                    <p class="subtitle is-6">@johnsmith</p>
+                </div>
+            </div>
 
-			<div class="content">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-				Phasellus nec iaculis mauris. <a>@bulmaio</a>.
-			</div>
-		</div>
-	</div>
+            <div class="content">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Phasellus nec iaculis mauris. <a>@bulmaio</a>.
+            </div>
+            <div class="likes">
+                <span class="icon-text">
+                  <span class="icon has-text-danger">
+                    <i class="fas fa-heart"></i>
+                  </span>
+                  <span class="likes-count">3</span>
+                </span>
+            </div>
+        </div>
+    </div>
 </template>
 
 
 <script type="application/javascript">
 
-	const searchBar = document.querySelector('#search-bar')
-	const searchResults = document.querySelector('#search-results')
-	const cardTemplate = document.querySelector('#book-template')
+  const searchBar = document.querySelector('#search-bar')
+  const searchResults = document.querySelector('#search-results')
+  const cardTemplate = document.querySelector('#book-template')
 
-	function clearBooks () {
-		searchResults.innerHTML = ''
-	}
+  function clearBooks() {
+    searchResults.innerHTML = ''
+  }
 
-	function addBook ({title, author, description}) {
-		const card = document.importNode(cardTemplate.content, true)
-		card.querySelector('.title').innerText = title
-		card.querySelector('.subtitle').innerText = author
-		card.querySelector('.content').innerText = description
-		searchResults.appendChild(card)
-	}
+  function addBook({title, author, description, upVotes}) {
+    const card = document.importNode(cardTemplate.content, true)
+    card.querySelector('.title').innerText = title
+    card.querySelector('.content').innerText = description
+    card.querySelector('.subtitle').innerText = author || ''
+    if (upVotes) {
+      card.querySelector('.likes-count').innerText = upVotes
+    } else {
+      card.querySelector('.likes').innerText = ''
+    }
+    searchResults.appendChild(card)
+  }
 
-	searchBar.addEventListener('change', async (event) => {
-		clearBooks()
-		const query = event.target.value
-		const raw = await fetch(`/search?q=${query}`)
-		const books = await raw.json()
-		for (let book of books) {
-			addBook(book._source)
-		}
-	})
+  searchBar.addEventListener('change', async (event) => {
+    clearBooks()
+    const query = event.target.value
+    const raw = await fetch(`/search?q=${query}`)
+    const books = await raw.json()
+    for (let book of books) {
+      addBook(book._source)
+    }
+  })
 </script>
 
 </body>
