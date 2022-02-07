@@ -30,13 +30,24 @@ app.get('/search', function (req, res) {
 		.search({
 			index: index,
 			body: {
-				size: 10,
-				from: 0,
-				query: {
-					match: {
-						title: req.query['q'],
-					},
-				},
+				"size": 10,
+				"from": 0,
+				"query": {
+					"function_score": {
+						"query": {
+							"multi_match": {
+								"query": req.query['q'],
+								"fields": ["title", "author", "description"]
+							}
+						},
+						"boost_mode": "multiply",
+						"field_value_factor": {
+							"field": "upVotes",
+							"modifier": "sqrt",
+							"missing": 0.75
+						}
+					}
+				}
 			},
 			type: '_doc'
 		})
