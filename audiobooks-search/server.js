@@ -3,7 +3,7 @@
 const elasticsearch = require('elasticsearch')
 
 // Instantiate an Elasticsearch client.
-const elasticsearchUrl = process.env.ELASTICSEARCH_HOSTS || 'http://192.168.64.2:9200'
+const elasticsearchUrl = process.env.ELASTICSEARCH_HOSTS || 'http://dockerhost:9200'
 const client = new elasticsearch.Client({
 	hosts: [elasticsearchUrl],
 })
