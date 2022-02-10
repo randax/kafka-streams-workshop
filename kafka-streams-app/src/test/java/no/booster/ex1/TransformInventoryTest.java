@@ -119,6 +119,7 @@ public class TransformInventoryTest {
 				.setTitle(title)
 				.setAuthorId(authorId)
 				.setDescription(description)
+				.setGenres("science,history")
 				.build();
 	}
 

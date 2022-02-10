@@ -20,17 +20,25 @@
 			  "type": "string"
 			},
 			{
-			  "name": "author_id",
-			  "type": "long"
+				"name": "author_id",
+				"type": "long"
 			},
-			{
-			  "name": "description",
-			  "type": [
-				"null",
-				"string"
-			  ],
-			  "default": null
-			}
+			  {
+				  "name": "description",
+				  "type": [
+					  "null",
+					  "string"
+				  ],
+				  "default": null
+			  },
+			  {
+				  "name": "genres",
+				  "type": [
+					  "null",
+					  "string"
+				  ],
+				  "default": null
+			  }
 		  ],
 		  "connect.name": "no.booster.inventory.book.Value"
 		}

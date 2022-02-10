@@ -15,10 +15,10 @@ spring:
               default.value.serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
               state.dir: ${STATE_DIR:/tmp/kafka-streams}
             functions:
-              transformBook.applicationId: transform-book
-              transformAuthor.applicationId: transform-author
-              joinAuthor.applicationId: join-author
-              upVotes.applicationId: up-votes
+              transformBook.applicationId: transform-book-v1
+              transformAuthor.applicationId: transform-author-v1
+              joinAuthor.applicationId: join-author-v1
+              upVotes.applicationId: up-votes-v1
           bindings:
             transformBook-in-0.consumer.keySerde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
             transformAuthor-in-0.consumer.keySerde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde

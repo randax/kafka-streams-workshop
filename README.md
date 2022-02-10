@@ -120,7 +120,7 @@ Let us help Cecilie with populating the Elasticsearch index. Register an Elastic
 
     curl -X POST -H 'Content-Type: application/json' -d @./connectors/elasticsearch-sink-books.json http://dockerhost:8085/connectors
 
-Try the search app again, and feel the joy. It is time to ask Cecilie to buy you a coffee!
+Try the search app again, and feel the joy. It's time to ask Cecilie to buy you a cappuccino!
 
 ## Exercise 2
 
@@ -230,3 +230,94 @@ And build and run your updated version of the ``kafka-streams-app``:
 
 Open the app [audiobooks-search](http://dockerhost:3001) again to see that the likes are visible, and that they are used
 to improve sorting!
+
+## Bonus Exercise
+
+If you have come this far, you have learned most of what is the essence of Kafka Streams from simple stateless
+transformations to stateful ones concerning joins and aggregation. Most of what you will write with Kafka Streams will
+probably concern at least one of these operations. But you have also had the luxury of method skeletons and unit tests
+prepared before. In this last exercise, you are not that lucky!
+
+When Cecilie showed the search application to the rest of the team she got a lot of praise for what she had accomplished
+in such a short amount of time. It reminded you to ask her for another cappuccino - this time better make it a double!
+
+The successful demo inspired the project manager. "Why can't we filter books by genres? Show me true crime - that's all
+I listen to!" And the database administrator Bjarte joined in, rather sarcastically. "That should be easy! Genres are
+stored in the books table after all."
+
+### Schema evolution
+
+Bjarte were in fact right, _genres_ is available in the ``no.booster.inventory.book.Envelope`` schema, but is currently
+ignored. To include genres we could create a brand-new type where we included it, _or_ we could instead choose to extend
+our ``Book`` and `BookProjection` types. Let's try the latter.
+
+A book's genres are stored as comma-separated strings in the database, but Cecilie want you to split them and provide an
+array of genres for each book. Add the following field to ``BookProjection.avsc``
+
+```
+{
+  "type": "record",
+  "name": "BookProjection",
+  "namespace": "no.booster.avro",
+  "fields": [
+	...
+    {"name": "genres", "type": {"type": "array", "items": "string"}}
+  ]
+}
+```
+
+When you run the tests (``./mvnw clean test``), you notice that many of them fail. This is a strong hint that you forgot
+to include a default value. Try once more, this time include a default:
+
+```
+    {"name": "genres", "type": {"type": "array", "items": "string"}, "default": []}
+```
+
+This time all tests run successfully! But why do we encourage defaults when evolving our schema? This has to do with
+backward compatibility. If you ever find yourself in a situation where you need to replay records from a Kafka topic,
+you would thank yourself for the foresight.
+
+You will also need to update ``Book.avsc`` similarly, before implementing the needed changes in your streaming apps
+`transformBook` and `joinAuthor`. And of course, be sure to extend unit tests to verify that genres are in fact included
+as expected.
+
+With successful unit tests in place, it is time to build and deploy the new version of the ``kafka-streams-app``:
+
+    docker-compose up -d --build kafka-streams-app
+
+### Replay records
+
+By now you are probably wondering why you don't see any updates in [Kafdrop](http://dockerhost:9000/). This is because
+your transformations have already processed all records there is, which means genres will only be included in updated or
+newly created book records.
+
+This is a typical problem when working with Kafka Streams, but a problem that Kafka Streams is very well suited to
+solve!
+Here, we will use a little trick, and give our transformations a new name. Update the following two properties in
+``application.yaml``:
+
+```
+transformBook.applicationId: transform-book-v2
+joinAuthor.applicationId: join-author-v2
+```
+
+Now, this should trigger updated book projections. It is time to see it in action!
+
+For the last time, update ``docker-compose.yaml``. This time to enable genres filter in the search app:
+
+```
+  audiobooks-search:
+    environment:
+      TOGGLE_GENRES_FILTER: on
+      ...
+```
+
+Restart ``audiobooks-search``:
+
+    docker-compose up -d audiobooks-search
+
+And build and run your updated version of the ``kafka-streams-app``:
+
+    docker-compose up -d --build kafka-streams-app
+
+Open [audiobooks-search](http://dockerhost:3001) to see genres listed!
