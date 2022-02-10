@@ -293,31 +293,25 @@ newly created book records.
 
 This is a typical problem when working with Kafka Streams, but a problem that Kafka Streams is very well suited to
 solve!
-Here, we will use a little trick, and give our transformations a new name. Update the following two properties in
-``application.yaml``:
 
-```
-transformBook.applicationId: transform-book-v2
-joinAuthor.applicationId: join-author-v2
-```
-
-Now, this should trigger updated book projections. It is time to see it in action!
-
-For the last time, update ``docker-compose.yaml``. This time to enable genres filter in the search app:
+Here, we will use a little trick, and give our transformations a new name. For the last time, update
+``docker-compose.yaml``. This time to enable genres filter in the search app:
 
 ```
   audiobooks-search:
     environment:
       TOGGLE_GENRES_FILTER: on
       ...
+      
+  kafka-streams-app:
+    environment:
+      SPRING_CLOUD_STREAM_KAFKA_STREAMS_BINDER_FUNCTIONS_TRANSFORMBOOK_APPLICATIONID: transform-book-v2
+      SPRING_CLOUD_STREAM_KAFKA_STREAMS_BINDER_FUNCTIONS_JOINAUTHOR_APPLICATIONID: join-author-v2
+      ...
 ```
 
-Restart ``audiobooks-search``:
+Now, this should trigger updated book projections. It is time to see it in action! Restart both services with:
 
-    docker-compose up -d audiobooks-search
+    docker-compose up -d
 
-And build and run your updated version of the ``kafka-streams-app``:
-
-    docker-compose up -d --build kafka-streams-app
-
-Open [audiobooks-search](http://dockerhost:3001) to see genres listed!
+Open [audiobooks-search](http://dockerhost:3001) to see genres in all their glory!
