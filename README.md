@@ -306,7 +306,6 @@ Here, we will use a little trick, and give our transformations a new name. For t
   kafka-streams-app:
     environment:
       SPRING_CLOUD_STREAM_KAFKA_STREAMS_BINDER_FUNCTIONS_TRANSFORMBOOK_APPLICATIONID: transform-book-v2
-      SPRING_CLOUD_STREAM_KAFKA_STREAMS_BINDER_FUNCTIONS_JOINAUTHOR_APPLICATIONID: join-author-v2
       ...
 ```
 
