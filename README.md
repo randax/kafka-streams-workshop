@@ -49,7 +49,7 @@ Open [Kafdrop](http://dockerhost:9000/) to see what topics are created.
 
 Now, register the debezium connector:
 
-    curl -X POST -H 'Content-Type: application/json' -d @./connectors/debezium-source-inventory.json http://dockerhost:8085/connectors
+    curl -X POST -H 'Content-Type: application/json' -d @./kafka-connect/debezium-source-inventory.json http://dockerhost:8085/connectors
 
 Check the status of the connector:
 
@@ -117,7 +117,7 @@ Notice something? No books, right?
 
 Let us help Cecilie with populating the Elasticsearch index. Register an Elasticsearch Sink connector:
 
-    curl -X POST -H 'Content-Type: application/json' -d @./connectors/elasticsearch-sink-books.json http://dockerhost:8085/connectors
+    curl -X POST -H 'Content-Type: application/json' -d @./kafka-connect/elasticsearch-sink-books.json http://dockerhost:8085/connectors
 
 Try the search app again, and feel the joy. It's time to ask Cecilie to buy you a cappuccino!
 
