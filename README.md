@@ -35,10 +35,9 @@ Books and authors are available under the schema ``inventory``:
 
 ### Kafka Connect and the Debezium plugin
 
-Now on to the fun part. We will set up an application that pulls data from our database and make it available in Kafka
-topics, and what better way than to use the Postgres transaction log as the source!
-If this task seems daunting, you will be happy to know that [
-Debezium](https://debezium.io/documentation/reference/stable/connectors/postgresql.html)
+Now on to the fun part. We will create a program that pulls data from our database to make it available in Kafka
+topics, and what better way than to use the Postgres transaction log as the source! If this task seems daunting, you
+will be happy to know that [Debezium](https://debezium.io/documentation/reference/stable/connectors/postgresql.html)
 provides all of that for us. FYI, this process is sometimes referred to as _Change Data Capture_.
 
 But first, let's start up _Kafka Connect_ (with the Debezium plugin installed), and _Kafdrop_ - a GUI to allow us to
@@ -76,7 +75,7 @@ Both connector state, and task state should be `RUNNING`:
 }
 ```
 
-Refresh Kafdrop, and validate that two new topics (_no.booster.inventory.book_ and _no.booster.inventory.author_)
+Refresh [Kafdrop](http://dockerhost:9000/), and validate that two new topics (_no.booster.inventory.book_ and _no.booster.inventory.author_)
 have been created, and that the data from the database tables are imported.
 
 Congratulations, you now have everything set up to sync data from the database to Kafka! And just to see that it works,

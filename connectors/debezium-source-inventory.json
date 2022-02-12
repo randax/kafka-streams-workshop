@@ -5,9 +5,9 @@
     "plugin.name": "pgoutput",
     "database.hostname": "db",
     "database.port": "5432",
-    "database.user": "foo",
-    "database.password": "foo",
-    "database.dbname": "foo",
+    "database.user": "admin",
+    "database.password": "admin",
+    "database.dbname": "audiobooks",
     "database.server.name": "no.booster",
     "schema.include.list": "inventory",
     "table.exclude.list": ""
