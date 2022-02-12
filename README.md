@@ -13,8 +13,8 @@ file. If you are on linux, or use Docker for Mac and are used to localhost, then
 
 ## Exercise 1
 
-In this exercise, we will learn how to use _Kafka Connect_ with the _Debezium_ plugin to pull data from our Postgres
-database into Kafka topics. Once data is available in Kafka topics, we will implement a simple transformation with
+In this first exercise we will learn how to use _Kafka Connect_ with the _Debezium_ plugin to pull data from Postgres
+into Kafka topics. Once data is available in Kafka topics, we will implement a simple transformation with
 _Kafka Streams_, and use another Kafka Connect plugin to load the data into _Elasticsearch_.
 
 ### Inspect database tables
@@ -26,14 +26,14 @@ Start up postgres service:
 In a separate terminal window, run _psql_. Please keep this terminal, as you will later use it to make changes to your
 data.
 
-    docker-compose exec db psql -U foo
+    docker-compose exec db psql -U admin -d audiobooks
 
 Books and authors are available under the schema ``inventory``:
 
     set search_path to inventory;
     select b.isbn, b.title, a.name from book b join author a on a.id=b.author_id;
 
-### Pull data into Kafka topics with Kafka Connect and the Debezium plugin
+### Kafka Connect and the Debezium plugin
 
 Now on to the fun part. We will set up an application that pulls data from our database and make it available in Kafka
 topics, and what better way than to use the Postgres transaction log as the source!
@@ -86,7 +86,7 @@ let's try to change the title of one of the books in the database:
 
 ### Transform data
 
-It is time to write our first _Kafka Stream_ application. This time it even involves writing a bit of Java code.
+It is time to create our first _Kafka Stream_ application, and it will even involve writing a bit of Java code.
 
 Open the folder ``kafka-streams-app`` in your favourite IDE, and add the missing parts
 in ``no.booster.ex1.TransformInventory``.
@@ -103,7 +103,7 @@ From the terminal that you run ``docker-compose``, build and run your first vers
 In Kafdrop, you should now see the topic ``books-v1``, and it should contain the records that were produced by your
 function ``transformBook``.
 
-### Export data to Elasticsearch
+### Elasticsearch Sink Connector
 
 It may be time to ask yourself the question, why am I doing all of this? If you didn't know, your colleague Cecilie has
 already built the first version of the new audiobooks search frontend app. Start it up:
@@ -125,7 +125,7 @@ Try the search app again, and feel the joy. It's time to ask Cecilie to buy you 
 ## Exercise 2
 
 In the first exercise we did set up a lot of stuff, but we didn't really provide a lot of value other than synchronize
-data from a Postgresql database to Elasticsearch. It is time to change that!
+data from a single Postgresql table to Elasticsearch. It is time to change that!
 
 Cecilie was really happy that the search engine now provides results, but she did note one thing: none of the books
 contain any author. And searching by author does not work, as it should. That will be the task of this second exercise.
@@ -302,7 +302,7 @@ Here, we will use a little trick, and give our transformations a new name. For t
     environment:
       TOGGLE_GENRES_FILTER: on
       ...
-      
+
   kafka-streams-app:
     environment:
       SPRING_CLOUD_STREAM_KAFKA_STREAMS_BINDER_FUNCTIONS_TRANSFORMBOOK_APPLICATIONID: transform-book-v2

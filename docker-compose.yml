@@ -44,8 +44,6 @@ services:
       - "8081:8081"
     depends_on:
       - kafka
-    #    volumes:
-    #      - ${PWD}/audiobooks-upvotes/:/home/foo
     networks:
       - workshop
 
@@ -90,16 +88,14 @@ services:
       - workshop
 
   db:
-    image: debezium/postgres:13
+    build: ./db
     restart: unless-stopped
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_USER=foo
-      - POSTGRES_PASSWORD=foo
-      - POSTGRES_DB=foo
-    volumes:
-      - ./db/init.sql:/docker-entrypoint-initdb.d
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=audiobooks
     networks:
       - workshop
 
