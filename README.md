@@ -297,11 +297,6 @@ Here, we will use a little trick, and give our transformations a new name. For t
 ``docker-compose.yaml``. This time to enable genres filter in the search app:
 
 ```
-  audiobooks-search:
-    environment:
-      TOGGLE_GENRES_FILTER: on
-      ...
-
   kafka-streams-app:
     environment:
       SPRING_CLOUD_STREAM_KAFKA_STREAMS_BINDER_FUNCTIONS_TRANSFORMBOOK_APPLICATIONID: transform-book-v2

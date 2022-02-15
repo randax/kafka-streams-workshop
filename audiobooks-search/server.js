@@ -37,7 +37,7 @@ app.get('/search', function (req, res) {
 						"query": {
 							"multi_match": {
 								"query": req.query['q'],
-								"fields": ["title", "author", "description"],
+								"fields": ["title", "author", "description", "genres"],
 								"fuzziness": "AUTO"
 							}
 						},
@@ -80,6 +80,7 @@ async function setup () {
 						title: {type: 'text'},
 						author: {type: 'text'},
 						description: {type: 'text'},
+						genres: {type: 'text'},
 					}
 				}
 			}
