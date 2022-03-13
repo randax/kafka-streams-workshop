@@ -60,6 +60,7 @@ public class JoinBookWithAuthorTest {
 				.setIsbn("0-7679-0817-1")
                 .setTitle("A Short History of Nearly Everything")
                 .setAuthor("Bill Bryson")
+				.setThumbnail("https://books.google.com/books/content?id=3Kh1DAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api")
                 .build();
     }
 
@@ -82,6 +83,7 @@ public class JoinBookWithAuthorTest {
 				.setIsbn("0-7679-0817-1")
                 .setAuthorId(1L)
                 .setTitle("A Short History of Nearly Everything")
+				.setThumbnail("https://books.google.com/books/content?id=3Kh1DAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api")
                 .build();
     }
 

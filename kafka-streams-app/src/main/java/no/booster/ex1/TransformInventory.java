@@ -25,6 +25,7 @@ public class TransformInventory {
 				.setTitle(v.getAfter().getTitle())
 				.setDescription(v.getAfter().getDescription())
 				.setAuthorId(v.getAfter().getAuthorId())
+				.setThumbnail(v.getAfter().getThumbnail())
 				.build();
 	}
 

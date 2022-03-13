@@ -40,9 +40,10 @@ public class TransformInventoryTest {
 		String description = "A popular science book that explains some areas of science, " +
 				"using easily accessible language that appeals more to the general public than many " +
 				"other books dedicated to the subject.";
+		String thumbnail = "https://books.google.com/books/content?id=3Kh1DAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api";
 		long authorId = 1L;
 
-		inventory.pipeInput(new Key(isbn), bookCreated(isbn, title, authorId, description));
+		inventory.pipeInput(new Key(isbn), bookCreated(isbn, title, authorId, description, thumbnail));
 
 		KeyValue<String, Book> res = books.readKeyValue();
 
@@ -52,6 +53,7 @@ public class TransformInventoryTest {
 				.setAuthorId(authorId)
 				.setTitle(title)
 				.setDescription(description)
+				.setThumbnail(thumbnail)
 				.build()
 		);
 		assertTrue(books.isEmpty());
@@ -74,14 +76,14 @@ public class TransformInventoryTest {
 		assertTrue(books.isEmpty());
 	}
 
-	private Envelope bookCreated(String isbn, String title, long authorId, String description) {
+	private Envelope bookCreated(String isbn, String title, long authorId, String description, String thumbnail) {
 		return Envelope.newBuilder()
 				.setSource(source())
 				.setOp("r")
 				.setTsMs(1643843496004L)
 				.setTransaction(null)
 				.setBefore(null)
-				.setAfter(bookValue(isbn, title, authorId, description))
+				.setAfter(bookValue(isbn, title, authorId, description, thumbnail))
 				.build();
 	}
 
@@ -92,7 +94,7 @@ public class TransformInventoryTest {
 				.setTsMs(1643843496004L)
 				.setTransaction(null)
 				.setAfter(null)
-				.setBefore(bookValue("0-7679-0817-1", "A Short History of Nearly Everything", 1L, ""))
+				.setBefore(bookValue("0-7679-0817-1", "A Short History of Nearly Everything", 1L, "", ""))
 				.build();
 	}
 
@@ -113,13 +115,14 @@ public class TransformInventoryTest {
 				.build();
 	}
 
-	private no.booster.inventory.book.Value bookValue(String isbn, String title, long authorId, String description) {
+	private no.booster.inventory.book.Value bookValue(String isbn, String title, long authorId, String description, String thumbnail) {
 		return no.booster.inventory.book.Value.newBuilder()
 				.setIsbn(isbn)
 				.setTitle(title)
 				.setAuthorId(authorId)
 				.setDescription(description)
 				.setGenres("science,history")
+				.setThumbnail(thumbnail)
 				.build();
 	}
 

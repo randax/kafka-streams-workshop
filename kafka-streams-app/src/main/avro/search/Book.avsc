@@ -6,6 +6,7 @@
 	{"name": "isbn", "type": "string"},
     {"name": "title", "type": "string"},
     {"name": "authorId", "type": "long"},
-    {"name": "description", "type": ["null", "string"], "default": null}
+    {"name": "description", "type": ["null", "string"], "default": null},
+    {"name": "thumbnail", "type": ["null", "string"], "default": null}
   ]
 }

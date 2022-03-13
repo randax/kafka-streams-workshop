@@ -7,6 +7,7 @@
     {"name": "title", "type": "string"},
     {"name": "author", "type": ["null", "string"], "default": null},
     {"name": "description", "type": ["null", "string"], "default": null},
+    {"name": "thumbnail", "type": ["null", "string"], "default": null},
     {"name": "upVotes", "type": ["null", "long"], "default": null}
   ]
 }

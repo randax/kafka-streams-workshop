@@ -25,6 +25,7 @@ public class JoinBookWithAuthor {
 				.setIsbn(book.getIsbn())
                 .setTitle(book.getTitle())
                 .setDescription(book.getDescription())
+				.setThumbnail(book.getThumbnail())
                 .setAuthor(author.getName())
                 .build();
     }

@@ -38,6 +38,14 @@
 					  "string"
 				  ],
 				  "default": null
+			  },
+			  {
+				  "name": "thumbnail",
+				  "type": [
+					  "null",
+					  "string"
+				  ],
+				  "default": null
 			  }
 		  ],
 		  "connect.name": "no.booster.inventory.book.Value"

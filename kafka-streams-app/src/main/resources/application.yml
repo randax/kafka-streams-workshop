@@ -9,7 +9,7 @@ spring:
           binder:
             deserializationExceptionHandler: logandfail
             configuration:
-              schema.registry.url: ${SCHEMA_REGISTRY_URL:http://docker:8081}
+              schema.registry.url: ${SCHEMA_REGISTRY_URL:http://dockerhost:8081}
               auto.register.schemas: true
               default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
               default.value.serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
