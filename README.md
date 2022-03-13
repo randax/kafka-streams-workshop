@@ -33,6 +33,8 @@ Books and authors are available under the schema ``inventory``:
     set search_path to inventory;
     select b.isbn, b.title, a.name from book b join author a on a.id=b.author_id;
 
+Books used in this workshop are based on the dataset found [here](https://www.kaggle.com/dylanjcastillo/7k-books-with-metadata)
+
 ### Kafka Connect and the Debezium plugin
 
 Now on to the fun part. We will create a program that pulls data from our database to make it available in Kafka
@@ -79,9 +81,9 @@ Refresh [Kafdrop](http://dockerhost:9000/), and validate that two new topics (_n
 have been created, and that the data from the database tables are imported.
 
 Congratulations, you now have everything set up to sync data from the database to Kafka! And just to see that it works,
-let's try to change the title of one of the books in the database:
+let's add the missing description to Steinbeck's book _The Pearl_:
 
-    update book set title='A Short History of Nearly Everything!' where isbn='0-7679-0817-1';
+    update book set description='The story, first published in 1947, follows a pearl diver, Kino, and explores man''s purpose as well as greed, defiance of societal norms, and evil. Steinbeck''s inspiration was a Mexican folk tale from La Paz, Baja California Sur, Mexico, which he had heard in a visit to the formerly pearl-rich region in 1940.' where isbn='9780140042320';
 
 ### Transform data
 
