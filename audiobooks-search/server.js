@@ -81,6 +81,7 @@ async function setup () {
 						author: {type: 'text'},
 						description: {type: 'text'},
 						genres: {type: 'text'},
+						thumbnail: {type: 'keyword'},
 					}
 				}
 			}

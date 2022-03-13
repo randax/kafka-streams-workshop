@@ -49,7 +49,7 @@
 			<div class="media">
 				<div class="media-left">
 					<figure class="image is-48x48">
-						<img alt="Placeholder image"
+						<img class="thumbnail" alt="Placeholder image"
 							 src="https://upload.wikimedia.org/wikipedia/commons/5/50/Closed_Book_Icon.svg">
 					</figure>
 				</div>
@@ -93,7 +93,7 @@
 		searchResults.innerHTML = ''
 	}
 
-	function addBook ({title, author, description, upVotes, genres}) {
+	function addBook ({title, author, description, upVotes, genres, thumbnail}) {
 		const card = document.importNode(cardTemplate.content, true)
 		card.querySelector('.title').innerText = title
 		card.querySelector('.content').innerText = description
@@ -102,6 +102,9 @@
 			card.querySelector('.likes-count').innerText = upVotes
 		} else {
 			card.querySelector('.likes').innerText = ''
+		}
+		if (thumbnail) {
+			card.querySelector('.thumbnail').src = thumbnail
 		}
 		for (let genre of (genres || [])) {
 			const tag = document.importNode(genreTemplate.content, true)
