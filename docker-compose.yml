@@ -133,7 +133,6 @@ services:
     environment:
       ELASTICSEARCH_HOSTS: http://elasticsearch:9200
       BOOKS_INDEX: books-v1
-      TOGGLE_GENRES_FILTER: off
     depends_on:
       - elasticsearch
     networks:

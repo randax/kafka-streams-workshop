@@ -1,3 +1,0 @@
-# Kafka Streams App
-
-todo
