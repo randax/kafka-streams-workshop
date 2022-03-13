@@ -1,5 +1,13 @@
 ## Before we start
 
+We highly recommend to run the ``./install.sh`` script before attending
+the workshop! This will download all docker images, and maven dependencies
+needed, and will allow you to get started quickly on the exercises.
+
+### Requirements
+
+TODO: kor mykje minne må docker ha?
+
 ### Add ``dockerhost`` to `/etc/hosts`
 
 This tutorial will refer to ``dockerhost`` as the hostname of your docker VM. It might be a good idea to alias it in
@@ -31,7 +39,7 @@ data.
 Books and authors are available under the schema ``inventory``:
 
     set search_path to inventory;
-    select b.isbn, b.title, a.name from book b join author a on a.id=b.author_id;
+    select b.isbn, b.title, a.name as author from book b join author a on a.id=b.author_id limit 10;
 
 Books used in this workshop are based on the dataset found [here](https://www.kaggle.com/dylanjcastillo/7k-books-with-metadata)
 
@@ -97,9 +105,9 @@ following command:
 
     ./mvnw clean package -Dtest=TransformInventoryTest
 
-From the terminal that you run ``docker-compose``, build and run your first version of the ``kafka-streams-app``:
+From the root project folder, start your first version of the ``kafka-streams-app``:
 
-    docker-compose up -d --build kafka-streams-app
+    docker-compose up -d kafka-streams-app
 
 In Kafdrop, you should now see the topic ``books-v1``, and it should contain the records that were produced by your
 function ``transformBook``.
@@ -151,7 +159,7 @@ in ``docker-compose.yaml``. Update the following environment variables:
 
   kafka-streams-app:
     environment:
-      SPRING_KAFKA_FUNCTION_DEFINITION: transformBook;transformAuthor;joinAuthor
+      SPRING_CLOUD_FUNCTION_DEFINITION: transformBook;transformAuthor;joinAuthor
       ...
 ```
 
@@ -217,7 +225,7 @@ variables:
 
   kafka-streams-app:
     environment:
-      SPRING_KAFKA_FUNCTION_DEFINITION: transformBook;transformAuthor;joinAuthor;upVotes
+      SPRING_CLOUD_FUNCTION_DEFINITION: transformBook;transformAuthor;joinAuthor;upVotes
       ...
 ```
 
