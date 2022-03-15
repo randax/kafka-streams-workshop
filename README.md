@@ -114,29 +114,29 @@ function ``transformBook``.
 
 ### Elasticsearch Sink Connector
 
-It may be time to ask yourself the question, why am I doing all of this? If you didn't know, your colleague Cecilie has
+It may be time to ask yourself the question, why am I doing all of this? If you didn't know, your colleague Karina has
 already built the first version of the new audiobooks search frontend app. Start it up:
 
     docker-compose up -d audiobooks-search
 
-Cecilie have chosen _Elasticsearch_ because she believes that it can deliver what she needs from the search backend, and
+Karina have chosen _Elasticsearch_ because she believes that it can deliver what she needs from the search backend, and
 she has even prepared some index mappings to use. Open the app [audiobooks-search](http://dockerhost:3001) that she has
 created.
 
 Notice something? No books, right?
 
-Let us help Cecilie with populating the Elasticsearch index. Register an Elasticsearch Sink connector:
+Let us help Karina with populating the Elasticsearch index. Register an Elasticsearch Sink connector:
 
     curl -X POST -H 'Content-Type: application/json' -d @./kafka-connect/elasticsearch-sink-books.json http://dockerhost:8085/connectors
 
-Try the search app again, and feel the joy. It's time to ask Cecilie to buy you a cappuccino!
+Try the search app again, and feel the joy. It's time to ask Karina to buy you a cappuccino!
 
 ## Exercise 2
 
 In the first exercise we did set up a lot of stuff, but we didn't really provide a lot of value other than synchronize
 data from a single Postgresql table to Elasticsearch. It is time to change that!
 
-Cecilie was really happy that the search engine now provides results, but she did note one thing: none of the books
+Karina was really happy that the search engine now provides results, but she did note one thing: none of the books
 contain any author. And searching by author does not work, as it should. That will be the task of this second exercise.
 
 ### Kafka Streams: Join Books with Author
@@ -178,7 +178,7 @@ Open the app [audiobooks-search](http://dockerhost:3001) again and see that the 
 
 ## Exercise 3
 
-The search app is now almost perfect, but there is one important thing missing that Cecilie has put a lot of work into
+The search app is now almost perfect, but there is one important thing missing that Karina has put a lot of work into
 when designing the index mapping; user recommendations!
 
 So far, the only source of data has been the inventory database tables. In this exercise you will start to enrich books
@@ -247,7 +247,7 @@ transformations to stateful ones concerning joins and aggregation. Most of what 
 probably concern at least one of these operations. But you have also had the luxury of method skeletons and unit tests
 prepared before. In this last exercise, you are not that lucky!
 
-When Cecilie showed the search application to the rest of the team she got a lot of praise for what she had accomplished
+When Karina showed the search application to the rest of the team she got a lot of praise for what she had accomplished
 in such a short amount of time. It reminded you to ask her for another cappuccino - this time better make it a double!
 
 The successful demo inspired the project manager. "Why can't we filter books by genres? Show me true crime - that's all
@@ -260,7 +260,7 @@ Bjarte were in fact right, _genres_ is available in the ``no.booster.inventory.b
 ignored. To include genres we could create a brand-new type where we included it, _or_ we could instead choose to extend
 our ``Book`` and `BookProjection` types. Let's try the latter.
 
-A book's genres are stored as comma-separated strings in the database, but Cecilie want you to split them and provide an
+A book's genres are stored as comma-separated strings in the database, but Karina want you to split them and provide an
 array of genres for each book. Add the following field to ``BookProjection.avsc``
 
 ```
