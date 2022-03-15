@@ -304,7 +304,7 @@ This is a typical problem when working with Kafka Streams, but a problem that Ka
 solve!
 
 Here, we will use a little trick, and give our transformations a new name. For the last time, update
-``docker-compose.yaml``. This time to enable genres filter in the search app:
+``docker-compose.yaml``. This time to change to consumer group id of the `transformBook` application:
 
 ```
   kafka-streams-app:
@@ -315,6 +315,6 @@ Here, we will use a little trick, and give our transformations a new name. For t
 
 Now, this should trigger updated book projections. It is time to see it in action! Restart both services with:
 
-    docker-compose up -d
+    docker-compose up -d kafka-streams-app audiobooks-search
 
 Open [audiobooks-search](http://dockerhost:3001) to see genres in all their glory!
