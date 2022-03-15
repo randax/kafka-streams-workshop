@@ -93,7 +93,7 @@ let's add the missing description to Steinbeck's book _The Pearl_:
 
     update book set description='The story, first published in 1947, follows a pearl diver, Kino, and explores man''s purpose as well as greed, defiance of societal norms, and evil. Steinbeck''s inspiration was a Mexican folk tale from La Paz, Baja California Sur, Mexico, which he had heard in a visit to the formerly pearl-rich region in 1940.' where isbn='9780140042320';
 
-### Transform data
+### Stateless transformation
 
 It is time to create our first _Kafka Stream_ application, and it will even involve writing a bit of Java code.
 
@@ -107,7 +107,7 @@ following command:
 
 From the root project folder, start your first version of the ``kafka-streams-app``:
 
-    docker-compose up -d kafka-streams-app
+    docker-compose up -d --build kafka-streams-app
 
 In Kafdrop, you should now see the topic ``books-v1``, and it should contain the records that were produced by your
 function ``transformBook``.
@@ -117,7 +117,7 @@ function ``transformBook``.
 It may be time to ask yourself the question, why am I doing all of this? If you didn't know, your colleague Karina has
 already built the first version of the new audiobooks search frontend app. Start it up:
 
-    docker-compose up -d audiobooks-search
+    docker-compose up -d --build audiobooks-search
 
 Karina have chosen _Elasticsearch_ because she believes that it can deliver what she needs from the search backend, and
 she has even prepared some index mappings to use. Open the app [audiobooks-search](http://dockerhost:3001) that she has
@@ -125,7 +125,7 @@ created.
 
 Notice something? No books, right?
 
-Let us help Karina with populating the Elasticsearch index. Register an Elasticsearch Sink connector:
+Let us help Karina with populating the Elasticsearch index by creating an Elasticsearch Sink connector:
 
     curl -X POST -H 'Content-Type: application/json' -d @./kafka-connect/elasticsearch-sink-books.json http://dockerhost:8085/connectors
 
