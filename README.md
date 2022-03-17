@@ -1,6 +1,8 @@
 Kafka Streams Workshop
 ======================
 
+![Kafka](kafka.jpeg)
+
 ## Before we start
 
 We highly recommend to run the ``./install.sh`` script before attending
