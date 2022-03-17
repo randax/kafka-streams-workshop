@@ -12,7 +12,6 @@ import java.util.function.Function;
 @Configuration
 public class TransformInventory {
 
-	// todo what is "correct" of ktable and kstream here?
 	@Bean
 	public Function<KStream<no.booster.inventory.book.Key, no.booster.inventory.book.Envelope>, KStream<String, Book>> transformBook() {
 		return books -> books.map((k, v) -> new KeyValue<>(k.getIsbn().toString(), transformBook(k, v)));
