@@ -14,14 +14,8 @@ public class AggregateUpVotes {
 
 	@Bean
 	public BiFunction<KTable<String, BookProjection>, KStream<String, UpVote>, KStream<String, BookProjection>> upVotes() {
-		return (books, upVotes) -> books
-				.leftJoin(upVotes.groupByKey().count(), this::withKarma)
-				.toStream();
+		// todo Exercise 3
+		throw new RuntimeException("Not implemented yet!");
 	}
 
-	private BookProjection withKarma(BookProjection book, Long karma) {
-		return BookProjection.newBuilder(book)
-				.setUpVotes(karma)
-				.build();
-	}
 }

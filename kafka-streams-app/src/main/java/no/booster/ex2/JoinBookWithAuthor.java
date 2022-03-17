@@ -13,24 +13,9 @@ import java.util.function.BiFunction;
 @Configuration
 public class JoinBookWithAuthor {
 
-    @Bean
-    public BiFunction<KTable<String, Book>, KTable<String, Author>, KStream<String, BookProjection>> joinAuthor() {
-        return (books, authors) -> books
-                .join(authors, this::byAuthorId, this::merge)
-                .toStream();
-    }
-
-    private BookProjection merge(Book book, Author author) {
-        return BookProjection.newBuilder()
-				.setIsbn(book.getIsbn())
-                .setTitle(book.getTitle())
-                .setDescription(book.getDescription())
-				.setThumbnail(book.getThumbnail())
-                .setAuthor(author.getName())
-                .build();
-    }
-
-    private String byAuthorId(Book t) {
-        return String.valueOf(t.getAuthorId());
-    }
+	@Bean
+	public BiFunction<KTable<String, Book>, KTable<String, Author>, KStream<String, BookProjection>> joinAuthor() {
+		// todo Exercise 2
+		throw new RuntimeException("Not implemented yet!");
+	}
 }

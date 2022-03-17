@@ -14,18 +14,8 @@ public class TransformInventory {
 
 	@Bean
 	public Function<KStream<no.booster.inventory.book.Key, no.booster.inventory.book.Envelope>, KStream<String, Book>> transformBook() {
-		return books -> books.map((k, v) -> new KeyValue<>(k.getIsbn().toString(), transformBook(k, v)));
-	}
-
-	private Book transformBook(no.booster.inventory.book.Key k, no.booster.inventory.book.Envelope v) {
-		if (v == null || v.getAfter() == null) return null;
-		return Book.newBuilder()
-				.setIsbn(k.getIsbn())
-				.setTitle(v.getAfter().getTitle())
-				.setDescription(v.getAfter().getDescription())
-				.setAuthorId(v.getAfter().getAuthorId())
-				.setThumbnail(v.getAfter().getThumbnail())
-				.build();
+		// todo Exercise 1
+		throw new RuntimeException("Not implemented yet!");
 	}
 
 	@Bean
