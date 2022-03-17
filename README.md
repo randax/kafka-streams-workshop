@@ -11,16 +11,16 @@ needed, and will allow you to get started quickly on the exercises.
 
 ### Requirements
 
-TODO: kor mykje minne må docker ha?
+You will need ``docker`` and `docker-compose` to run containers. Make sure that
+Docker has enough memory available, minimum 6G.
 
 ### Add ``dockerhost`` to `/etc/hosts`
 
 This tutorial will refer to ``dockerhost`` as the hostname of your docker VM. It might be a good idea to alias it in
 your ``/etc/hosts``
-file. If you are on linux, or use Docker for Mac and are used to localhost, then simply add:
+file. If you are on Linux, or use Docker for Mac and use localhost, then simply add:
 
 ```
-➜  tail -n1 /etc/hosts
 127.0.0.1 dockerhost
 ```
 
