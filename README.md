@@ -110,12 +110,9 @@ Both connector state, and task state should be `RUNNING`:
 Refresh [Kafdrop](http://dockerhost:9000/), and validate that two new topics (_no.booster.inventory.book_ and _no.booster.inventory.author_)
 have been created, and that the data from the database tables are imported.
 
-Congratulations, you now have everything set up to sync data from the database to Kafka! And just to see that it works,
-let's add the missing description to Steinbeck's book _The Pearl_:
+Congratulations, you now have everything set up to sync data from the database to Kafka!
 
-    update book set description='The story, first published in 1947, follows a pearl diver, Kino, and explores man''s purpose as well as greed, defiance of societal norms, and evil. Steinbeck''s inspiration was a Mexican folk tale from La Paz, Baja California Sur, Mexico, which he had heard in a visit to the formerly pearl-rich region in 1940.' where isbn='9780140042320';
-
-### Stateless transformation
+### Kafka Streams: Stateless transformation
 
 It is time to create our first _Kafka Stream_ application, and it will even involve writing a bit of Java code.
 
@@ -151,7 +148,17 @@ Let us help Karina with populating the Elasticsearch index by creating an Elasti
 
     curl -X POST -H 'Content-Type: application/json' -d @./kafka-connect/elasticsearch-sink-books.json http://dockerhost:8085/connectors
 
-Try the search app again, and feel the joy. It's time to ask Karina to buy you a cappuccino!
+Try the search app again, and feel the joy.
+
+### Test the pipeline
+As one last thing, let's validate that updates to the postgres data is propagated all the way to Elastic. First,
+search up Steinbeck's book _The Pearl_. It is listed without description. Now, let's try to add the
+missing description:
+
+    update book set description='The story, first published in 1947, follows a pearl diver, Kino, and explores man''s purpose as well as greed, defiance of societal norms, and evil. Steinbeck''s inspiration was a Mexican folk tale from La Paz, Baja California Sur, Mexico, which he had heard in a visit to the formerly pearl-rich region in 1940.' where isbn='9780140042320';
+
+Try the same search again, and this time the book should include a description.
+
 
 ## Exercise 2
 
@@ -270,7 +277,7 @@ probably concern at least one of these operations. But you have also had the lux
 prepared before. In this last exercise, you are not that lucky!
 
 When Karina showed the search application to the rest of the team she got a lot of praise for what she had accomplished
-in such a short amount of time. It reminded you to ask her for another cappuccino - this time better make it a double!
+in such a short amount of time.
 
 The successful demo inspired the project manager. "Why can't we filter books by genres? Show me true crime - that's all
 I listen to!" And the database administrator Bjarte joined in, rather sarcastically. "That should be easy! Genres are
