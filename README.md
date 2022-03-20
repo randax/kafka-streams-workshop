@@ -3,7 +3,7 @@ Kafka Streams Workshop
 
 ![Kafka](kafka.jpeg)
 
-## Before we start
+## Getting started
 
 We highly recommend to run the ``./install.sh`` script (or `install.bat` for windows) before attending
 the workshop! This will download all docker images, and maven dependencies
