@@ -5,24 +5,27 @@ Kafka Streams Workshop
 
 ## Before we start
 
-We highly recommend to run the ``./install.sh`` script before attending
+We highly recommend to run the ``./install.sh`` script (or `install.bat` for windows) before attending
 the workshop! This will download all docker images, and maven dependencies
 needed, and will allow you to get started quickly on the exercises.
 
 ### Requirements
 
-You will need ``docker`` and `docker-compose` to run containers. Make sure that
+You need to have jdk installed (preferably `jdk-17`) and maven.
+
+You will also need ``docker`` and `docker-compose` to run containers. Make sure that
 Docker has enough memory available, minimum 6G.
 
 ### Add ``dockerhost`` to `/etc/hosts`
 
 This tutorial will refer to ``dockerhost`` as the hostname of your docker VM. It might be a good idea to alias it in
-your ``/etc/hosts``
-file. If you are on Linux, or use Docker for Mac and use localhost, then simply add:
+your ``/etc/hosts`` file. If you are on Linux, or use Docker for Mac and use localhost, then simply add
 
 ```
 127.0.0.1 dockerhost
 ```
+
+Edit `C:\Windows\System32\drivers\etc\hosts` if you are on Windows.
 
 ## What we will build
 
