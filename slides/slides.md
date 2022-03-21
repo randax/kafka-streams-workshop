@@ -46,19 +46,19 @@ The last comment block of each slide will be treated as slide notes. It will be 
 
 # Exercise 1
 
-Use code snippets and get the highlighting directly!
+Stateless transformations
 
-```ts {all|2|1-6|9|all}
-interface User {
-  id: number
-  firstName: string
-  lastName: string
-  role: string
-}
+```java {all|2|1-6|9|all}
+  @Bean
+  public Function<KStream<Key, Envelope>, KStream<String, Book>> transformBook() {
+      // todo Exercise 1
+      // Input: Stream of records from Debezium 
+      // Output: Stream of Book records, with bookId as key
+  }
 
-function updateUser(id: number, update: User) {
-  const user = getUser(id)
-  const newUser = {...user, ...update}  
-  saveUser(id, newUser)
-}
+  @Bean
+  public Function<KStream<Key, Envelope>, KStream<String, Author>> transformAuthor() {
+      // Similar for authors
+      return authors -> authors.map((k, v) -> new KeyValue<>(String.valueOf(k.getId()), transformAuthor(v)));
+  }
 ```
