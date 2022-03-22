@@ -15,7 +15,10 @@ public class JoinBookWithAuthor {
 
 	@Bean
 	public BiFunction<KTable<String, Book>, KTable<String, Author>, KStream<String, BookProjection>> joinAuthor() {
-		// todo Exercise 2
+		// Exercise 2: Join books with author by foreign key `author_id`
+		// Input 0: Books (key: bookId, value: Book)
+		// Input 1: Authors (key: authorId, value: Author)
+		// Output: Stream of BookProjection records, with author name from Author (key: bookId, value: BookProjection)
 		throw new RuntimeException("Not implemented yet!");
 	}
 }

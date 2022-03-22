@@ -14,9 +14,9 @@ public class TransformInventory {
 
 	@Bean
 	public Function<KStream<no.booster.inventory.book.Key, no.booster.inventory.book.Envelope>, KStream<String, Book>> transformBook() {
-		// todo Exercise 1: Create a function that takes one stream as input, and returns another as output.
+		// Exercise 1: Transform stream of Debezium records
 		// Input: Stream of records from Debezium
-		// Output: Stream of Book records, with bookId as key
+		// Output: Stream of Book records, with bookId as key (key: bookId, value: Book)
 		throw new RuntimeException("Not implemented yet!");
 	}
 

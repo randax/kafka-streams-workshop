@@ -43,29 +43,59 @@ The last comment block of each slide will be treated as slide notes. It will be 
 -->
 
 ---
+layout: two-cols
+---
 
-# Exercise 1
+# Exercises
 
-Stateless transformations
+0) Set up data pipeline
+1) Stateless transform
+2) Joins
+3) Aggregation
+
+Bonus exercise:
+
+4) Schema evolution
+
+::right::
+
+<img src="/audiobooks-search.png" />
+
+
+---
+
+# Exercise 0: Set up data pipeline
+
+<img src="/flow.png" class="" style="width: 100%" />
+
+---
+
+# Exercise 1: Stateless transformations
+
+Transform stream of Debezium records
 
 ```java {all}
   @Bean
   public Function<KStream<Key, Envelope>, KStream<String, Book>> transformBook() {
-      // Exercise 1: Create a function that takes one stream as input, and returns another as output.
-      // Input: Stream of records from Debezium 
-      // Output: Stream of Book records, with bookId as key
+      // Input: Stream of records from Debezium
+      // Output: Stream of Book records, with bookId as key (key: bookId, value: Book)
+      return books -> ...
   }
 
+  // Example: authors
   @Bean
   public Function<KStream<Key, Envelope>, KStream<String, Author>> transformAuthor() {
-      // Similarily for authors
       return authors -> authors.map((k, v) -> new KeyValue<>(String.valueOf(k.getId()), transformAuthor(v)));
   }
 ```
 
+Operators that could come in handy:
+- _map_
+
+
 ---
 
-# Exercise 1 - Unit test
+# Exercise 1: Unit test
 
 ```java {all}
 
@@ -74,7 +104,7 @@ Stateless transformations
 
   @Test
   public void testInsert() {
-  
+
       // Given input
       inputTopic.pipeInput(key(), bookCreated());
 
@@ -83,7 +113,48 @@ Stateless transformations
 
       assertThat(record.key).isEqualTo("0-7679-0817-1");
       assertThat(record.value.getTitle()).isEqualTo("A Short History of Nearly Everything");
-      assertTrue(outputTopic.isEmpty()); 
+      assertTrue(outputTopic.isEmpty());
   }
 
 ```
+
+---
+
+# Exercise 2: Joins
+
+Join books with author by foreign key
+
+```java {all}
+  	@Bean
+	public BiFunction<KTable<String, Book>, KTable<String, Author>, KStream<String, BookProjection>> joinAuthor() {
+		// Input 0: Books (key: bookId, value: Book)
+		// Input 1: Authors (key: authorId, value: Author)
+		// Output: Stream of BookProjection records, with author name from Author (key: bookId, value: BookProjection)
+		return (books, authors) -> ...
+	}
+```
+
+Operators that could come in handy:
+- _join_
+
+---
+
+# Exercise 3: Aggregations
+
+Join books with count of up-votes
+
+```java {all}
+	@Bean
+	public BiFunction<KTable<String, BookProjection>, KStream<String, UpVote>, KStream<String, BookProjection>> upVotes() {
+		// Input 0: Book projections (key: bookId, value: BookProjection)
+		// Input 1: Up-votes (key: bookId, value: UpVote)
+		// Output: Stream of BookProjection records, with up-vote count (key: bookId, value: BookProjection)
+		return (books, upVotes) -> ...
+	}
+
+```
+
+Operators that could come in handy:
+- _leftJoin_
+- _groupByKey_
+- _count_
