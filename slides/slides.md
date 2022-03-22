@@ -48,17 +48,42 @@ The last comment block of each slide will be treated as slide notes. It will be 
 
 Stateless transformations
 
-```java {all|2|1-6|9|all}
+```java {all}
   @Bean
   public Function<KStream<Key, Envelope>, KStream<String, Book>> transformBook() {
-      // todo Exercise 1
+      // Exercise 1: Create a function that takes one stream as input, and returns another as output.
       // Input: Stream of records from Debezium 
       // Output: Stream of Book records, with bookId as key
   }
 
   @Bean
   public Function<KStream<Key, Envelope>, KStream<String, Author>> transformAuthor() {
-      // Similar for authors
+      // Similarily for authors
       return authors -> authors.map((k, v) -> new KeyValue<>(String.valueOf(k.getId()), transformAuthor(v)));
   }
+```
+
+---
+
+# Exercise 1 - Unit test
+
+```java {all}
+
+  private TestInputTopic<Key, Envelope> inputTopic;
+  private TestOutputTopic<String, Book> outputTopic;
+
+  @Test
+  public void testInsert() {
+  
+      // Given input
+      inputTopic.pipeInput(key(), bookCreated());
+
+      // When output one record
+      KeyValue<String, Book> record = outputTopic.readKeyValue();
+
+      assertThat(record.key).isEqualTo("0-7679-0817-1");
+      assertThat(record.value.getTitle()).isEqualTo("A Short History of Nearly Everything");
+      assertTrue(outputTopic.isEmpty()); 
+  }
+
 ```
