@@ -95,6 +95,17 @@ layout: center
 layout: center
 ---
 
+# Practical information
+- GitHub: https://github.com/mlundela/kafka-streams-workshop
+- Clone repo and run the install scripts.
+
+
+
+
+---
+layout: center
+---
+
 # Technology Stack
 
 ---
