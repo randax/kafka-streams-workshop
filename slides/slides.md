@@ -8,6 +8,9 @@ background: https://source.unsplash.com/collection/94734566/1920x1080
 class: 'text-center'
 # https://sli.dev/custom/highlighters.html
 highlighter: shiki
+layout: cover
+title: Building a search engine backend with Kafka Streams and Connect
+colorSchema: dark
 # show line numbers in code blocks
 lineNumbers: false
 # some information about the slides, markdown enabled
@@ -21,9 +24,9 @@ drawings:
   persist: false
 ---
 
-# Welcome to Workshop
+# Search backend with Kafka Streams and Connect
 
-Search backend with Kafka Streams and Connect
+Booster 2022
 
 <div class="pt-12">
   <span @click="$slidev.nav.next" class="px-2 py-1 rounded cursor-pointer" hover="bg-white bg-opacity-10">
@@ -41,6 +44,163 @@ Search backend with Kafka Streams and Connect
 <!--
 The last comment block of each slide will be treated as slide notes. It will be visible and editable in Presenter Mode along with the slide. [Read more in the docs](https://sli.dev/guide/syntax.html#notes)
 -->
+---
+layout: intro
+---
+
+<h1 text="!5xl">Øyvind Randa</h1>
+
+<div class="leading-8 opacity-80">
+Technology enthusiast and Leader for <a href="https://gdgbergen.no/" target="_blank">Google Developer Group Bergen</a>.<br>
+Solution Architect at <a href="https://nextgentel.no" target="_blank">NextGenTel</a>.<br>
+</div>
+
+<div class="my-10 grid grid-cols-[40px,1fr] w-min gap-y-4">
+  <ri-github-line class="opacity-50"/>
+  <div><a href="https://github.com/randax" target="_blank">randax</a></div>
+  <ri-twitter-line class="opacity-50"/>
+  <div><a href="https://twitter.com/oyvir" target="_blank">oyvir</a></div>
+</div>
+
+<img src="/images/oyvind.png" class="rounded-full w-40 abs-tr mt-30 mr-20"/>
+
+---
+layout: intro
+---
+
+<h1 text="!5xl">Mads Lundeland</h1>
+
+<div class="leading-8 opacity-80">
+Software developer at <a href="https://tv2.no" target="_blank">TV 2</a>.<br>
+Experience with running Kafka Streams and Elasticsearch in production.<br>
+</div>
+
+<div class="my-10 grid grid-cols-[40px,1fr] w-min gap-y-4">
+  <ri-github-line class="opacity-50"/>
+  <div><a href="https://github.com/mlundela" target="_blank">mlundela</a></div>
+  <ri-twitter-line class="opacity-50"/>
+  <div><a href="https://twitter.com/mlundela" target="_blank">mlundela</a></div>
+</div>
+
+<img src="/images/mads.jpeg" class="rounded-full w-40 abs-tr mt-30 mr-20"/>
+
+---
+layout: center
+---
+
+# Technology Stack
+
+
+---
+layout: center
+---
+
+# Technology Stack
+
+---
+name: KafkaStreams
+layout: center
+---
+<div class="grid grid-cols-[3fr,2fr] gap-4">
+  <div class="text-center pb-4">
+  <img class="h-50 inline-block" src="https://apache.org/logos/res/kafka/kafka_highres.png">
+  <div class="opacity-50 mb-2 text-sm">
+      Open-source distributed event streaming platform
+  </div>
+  <div class="text-center">
+    <a class="!border-none" href="https://github.com/apache/kafka" target="__blank"><img class="mt-2 h-4 inline mx-0.5" alt="GitHub stars" src="https://img.shields.io/github/stars/apache/kafka?style=social"></a>
+   </div>
+  </div>
+  <div class="border-l border-gray-400 border-opacity-25 !all:leading-12 !all:list-none my-auto">
+
+  - High throughput
+  - Scalable
+  - Permanent storage
+  - High availability
+  - Built-in stream processing
+  - Connect to almost anything
+  </div>
+</div>
+
+---
+layout: center
+class: text-center
+---
+ # Kafka Streams
+ key concepts 
+
+---
+layout two-cols
+---
+# What is Kafka Streams?
+
+- Simple and lightweight client library.
+- No external dependencies on systems other than Apache Kafka itself.
+- fault-tolerant local state.
+- Supports exactly-once processing.
+- Employs one-record-at-a-time processing to achieve millisecond processing latency, and supports event-time based windowing operations with out-of-order arrival of records.
+- Offers necessary stream processing primitives, along with a high-level Streams DSL and a low-level Processor API.
+
+---
+name: Kafka Streams DSL
+---
+# Kafka Streams DSL
+Operators that come out of the box
+  - Map
+  - Filter
+  - Join
+  - Aggregations
+
+--- 
+name: Kafka Streams and tables
+--- 
+
+# Kafka Streams and Tables
+  - KStreams
+    - All <b>Inserts</b>
+    - Similar to a log
+  - KTable
+    - All <b>upserts</b> on non-null values
+    - Similar to a table
+    - Typically used with log compacted topics
+
+---
+name: Kafka Streams and statestore
+layout: two-cols
+---
+# Kafka Streams State Store
+For stateful operations, Kafka Streams uses local state stores that are made fault-tolerant by associated changelog topics stored in Kafka. For these state stores, Kafka Streams uses RocksDB as its default storage to maintain local state on a computing node (think: a container that runs one instance of your distributed application).
+
+<a href="https://www.confluent.io/blog/how-to-tune-rocksdb-kafka-streams-state-stores-performance/" target="_blank">Read more here</a>
+::right::
+
+<img src="/images/statedrawing.png" />
+
+---
+name: KafkaConnect
+layout: center
+---
+ # Kafka Connect
+
+- Scaleable tool for streaming between Kafka and and other data systems.
+- Works as a centralized data hub for simple data integration between databases, key-value stores, and file systems
+
+---
+name: Debezium
+layout: center
+---
+# Debezium
+
+- Debezium captures the changes in a transaction log and produces a stream of change events.
+- Works as a plugin for Kafka Connect
+---
+name: Elasticsearch
+layout: center
+---
+ # Elasticsearch
+
+- Elasticsearch is a distributed, RESTful search and analytics engine.
+- Often used as backend for web frontend.
 
 ---
 layout: two-cols
