@@ -235,9 +235,57 @@ Bonus exercise:
 
 ---
 
-# Exercise 0: Set up data pipeline
+# Exercise 0: Data pipeline
 
 <img src="/flow.png" class="" style="width: 100%" />
+
+---
+
+# Exercise 0: Postgres
+
+Set up Postgres audiobooks database
+
+Start up postgres service:
+
+```shell
+    docker-compose up -d db
+```
+
+
+In a separate terminal window, run _psql_. Please keep this terminal, as you will later use it to make changes to your
+data.
+
+```shell
+    docker-compose exec db psql -U admin -d audiobooks
+```
+
+Books and authors are available under the schema ``inventory``:
+
+```shell
+    set search_path to inventory;
+    select b.isbn, b.title, a.name as author from book b join author a on a.id=b.author_id limit 10;
+```
+---
+
+# Exercise 0: Debezium
+Set up Debezium
+
+Start up _Kafka Connect_ (with the Debezium plugin installed), and _Kafdrop_ - a GUI to allow us to
+easily see the content of our topics.
+
+```shell
+    docker-compose up -d kafka-connect kafdrop
+```
+
+Open [Kafdrop](http://dockerhost:9000/) to see what topics are created.
+
+Now, register the debezium connector:
+
+```shell
+    curl -X POST -H 'Content-Type: application/json' \
+    -d @./kafka-connect/debezium-source-inventory.json \ 
+    http://dockerhost:8085/connectors
+```
 
 ---
 

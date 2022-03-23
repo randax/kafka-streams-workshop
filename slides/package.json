@@ -13,6 +13,6 @@
   },
   "name": "slides",
   "devDependencies": {
-    "@iconify-json/ri": "^1.1.1"
+    "@iconify-json/ri": "1.1.1"
   }
 }
