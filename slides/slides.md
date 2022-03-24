@@ -114,7 +114,7 @@ layout: center
 ---
 <div class="grid grid-cols-[3fr,2fr] gap-4">
   <div class="text-center pb-4">
-  <img class="h-50 inline-block" src="https://apache.org/logos/res/kafka/kafka_highres.png">
+  <img class="h-50 inline-block" src="https://apache.org/logos/res/kafka/kafka_highres.png" style="background-color: aliceblue">
   <div class="opacity-50 mb-2 text-sm">
       Open-source distributed event streaming platform
   </div>
