@@ -252,8 +252,7 @@ Start up postgres service:
 ```
 
 
-In a separate terminal window, run _psql_. Please keep this terminal, as you will later use it to make changes to your
-data.
+In a separate terminal window, run _psql_.
 
 ```shell
     docker-compose exec db psql -U admin -d audiobooks
