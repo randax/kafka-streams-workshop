@@ -18,7 +18,8 @@ public class AggregateUpVotes {
 		// Input 0: Book projections (key: bookId, value: BookProjection)
 		// Input 1: Up-votes (key: bookId, value: UpVote)
 		// Output: Stream of BookProjection records, with up-vote count (key: bookId, value: BookProjection)
-		throw new RuntimeException("Not implemented yet!");
+//		throw new RuntimeException("Not implemented yet!");
+		return null;
 	}
 
 }

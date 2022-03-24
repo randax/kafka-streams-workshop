@@ -19,6 +19,7 @@ public class JoinBookWithAuthor {
 		// Input 0: Books (key: bookId, value: Book)
 		// Input 1: Authors (key: authorId, value: Author)
 		// Output: Stream of BookProjection records, with author name from Author (key: bookId, value: BookProjection)
-		throw new RuntimeException("Not implemented yet!");
+//		throw new RuntimeException("Not implemented yet!");
+		return null;
 	}
 }
